@@ -2,6 +2,18 @@
     <h1>Thank you for signing the Petition</h1>
     <img src="/dogs.jpg" alt="funny meme thing" class="jpeg">
     <form method="post">
-    <a href="/signers">click here to see others who signed</a>
-</form>
+    <p>click here to see others who signed</p>
+    <button type="submit" name="booty">Click Me!</button>
+    </form>
+{{#if data}}
+<div class="results">
+<ul>
+    {{!-- {{#data}}
+    <li>Name: {{this.first}} {{this.last}} {{this.signatures}}</li
+    <li>Name: {{this.rows}}</li
+        {{/data}} --}}
+        
+    </ul>
+</div>
+{{/if}}
 </div>

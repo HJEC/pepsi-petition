@@ -46,7 +46,19 @@ app.get("/thanks", (req, res) => {
 });
 
 app.post("/thanks", (req, res) => {
-    signatures.getSigners;
+    // let showSigs = true;
+    signatures
+        .getSigners()
+        .then(data => {
+            console.log("List should render");
+            res.render("thanks", {
+                // showSigs,
+                data
+            });
+        })
+        .catch(err => {
+            console.log("error in post: ", err);
+        });
 });
 
 app.listen(8080, () => console.log("Petition server is listening"));

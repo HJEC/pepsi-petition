@@ -3,10 +3,8 @@ const spicedPg = require("spiced-pg"),
 
 exports.getSigners = function() {
     return db
-        .query("SELECT id, first, last, signatures FROM signatures")
-        .then(({ rows }) => {
-            console.log("here is the result: ", rows);
-        });
+        .query("SELECT first, last, signatures FROM signatures")
+        .then(({ rows }) => rows);
 };
 
 // BUILDING THE STRINGS WITH INPUT FROM OUTSIDE USERS IS DANGEROUS!
