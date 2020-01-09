@@ -25,6 +25,7 @@ app.get("/petition", (req, res) => {
 app.post("/petition", (req, res) => {
     let firstName = req.body.first;
     let lastName = req.body.last;
+    // let canvasData = req.body;
     let sig = req.body.sig;
 
     signatures
@@ -42,6 +43,10 @@ app.post("/petition", (req, res) => {
 
 app.get("/thanks", (req, res) => {
     res.render("thanks");
+});
+
+app.post("/thanks", (req, res) => {
+    signatures.getSigners;
 });
 
 app.listen(8080, () => console.log("Petition server is listening"));
