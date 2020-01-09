@@ -1,0 +1,18 @@
+<div class="petition container">
+    <h1>LETS SIGN A PETITION! 🐶</h1>
+    <h2>Here are some things to care about: Example, example, example</h2>
+    <img src="/dogs.jpg" alt="funny meme thing" class="jpeg">
+
+    {{#if err}}
+    <p class="not_signed">You must fill all input fields to continue</p>
+    {{/if}}
+
+    <form  method="post">
+
+    <input class="first" type="text" name="first" placeholder="enter first name">
+    <input class="last" type="text" name="last" placeholder="enter last name">
+    <input class="sig" type="visible" type="text" name="sig">
+    {{!-- <canvas id="canvas" width="400" height="250"></canvas> --}}
+    <button class="button">submit now</button>
+</form>
+</div>
