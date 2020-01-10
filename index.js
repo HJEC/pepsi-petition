@@ -4,6 +4,8 @@ const hb = require("express-handlebars");
 const signatures = require("./signatures");
 // const cp = require('cookie-parser');
 const cookieSession = require("cookie-session");
+const { SESSION_SECRET: sessionSecret } = require("./secrets.json");
+const csurf = require("csurf");
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -18,10 +20,19 @@ app.use(
 
 app.use(
     cookieSession({
-        secret: "hootie",
+        secret: sessionSecret,
         maxAge: 1000 * 60 * 60 * 24 * 14
     })
 );
+
+app.use(csurf()); // CSURF middleware to look for valid secret TOKEN. This adds CSRF Token to request object.
+
+app.use(function(req, res, next) {
+    res.set("x-frame-options", "DENY"); // set headers to stop clickjacking with iframe windows
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
 app.get("/", (req, res) => {
     console.log("You went to the slash route");
     //
@@ -33,14 +44,14 @@ app.get("/", (req, res) => {
 
 app.get("/petition", (req, res) => {
     console.log("GET request reaches petition");
+    console.log("Session Secret: ", sessionSecret);
     //
     /////// COOKIES //////
     req.session.peppermint = "Monkey Martin";
     console.log("req.session: ", req.session.peppermint);
     //
     res.render("petition", {
-        layout: "main",
-        helpers: {}
+        // csrfToken: req.csrfToken()
     });
 });
 

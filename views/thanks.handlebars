@@ -1,16 +1,20 @@
 <div class="thanks container">
     <h1>Thank you for signing the Petition</h1>
     <img src="/dogs.jpg" alt="funny meme thing" class="jpeg">
+
     <form method="post">
     <p>click here to see others who signed</p>
     <button type="submit" name="booty">Click Me!</button>
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </form>
+
 {{#if data}}
 <div class="results">
 <ul>
     <br>
     {{#data}}
-    <li>Name: {{this.first}} {{this.last}} signature: {{this.signature}}</li> <br>
+    <li>Name: {{this.first}} {{this.last}} signature:</li>
+    <image src="{{this.signature}}"><br>
     {{/data}}
 
     </ul>
