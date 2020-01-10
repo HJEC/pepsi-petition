@@ -1,6 +1,10 @@
 <div class="thanks container">
     <h1>Thank you for signing the Petition</h1>
+    {{#if sig}}
+    <img src="{{sig}}"><br>
+        {{else}}
     <img src="/dogs.jpg" alt="funny meme thing" class="jpeg">
+    {{/if}}
 
     <form method="post">
     <p>click here to see others who signed</p>
@@ -13,8 +17,8 @@
 <ul>
     <br>
     {{#data}}
-    <li>Name: {{this.first}} {{this.last}} signature:</li>
-    <image src="{{this.signature}}"><br>
+    <li>Name: {{this.first}} {{this.last}} time: {{this.t_stamp}} signature:</li>
+    <img src="{{this.signature}}"><br>
     {{/data}}
 
     </ul>

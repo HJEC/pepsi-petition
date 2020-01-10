@@ -6,4 +6,5 @@
 #canvas {
     border: 4px solid black;
     background-image: url("/sign.jpg");
+    background-size: cover;
 }

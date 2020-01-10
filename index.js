@@ -36,36 +36,43 @@ app.use(function(req, res, next) {
 app.get("/", (req, res) => {
     console.log("You went to the slash route");
     //
-    req.session.peppermint = "Rhino Randy";
-    console.log("req.session for the slash route: ", req.session.peppermint);
+    // req.session.peppermint = "Rhino Randy";
+    // console.log("req.session for the slash route: ", req.session.peppermint);
+    console.log("req.session.id for /: ", req.session.signatureId);
     //
     res.redirect("/petition");
 });
 
 app.get("/petition", (req, res) => {
     console.log("GET request reaches petition");
-    console.log("Session Secret: ", sessionSecret);
+    // console.log("Session Secret: ", sessionSecret);
     //
     /////// COOKIES //////
-    req.session.peppermint = "Monkey Martin";
-    console.log("req.session: ", req.session.peppermint);
+    // req.session.peppermint = "Monkey Martin";
+    // console.log("req.session: ", req.session.peppermint);
     //
-    res.render("petition", {
-        // csrfToken: req.csrfToken()
-    });
+    if (req.session.signatureId) {
+        res.redirect("/thanks");
+    } else {
+        res.render("petition", {
+            // csrfToken: req.csrfToken()
+        });
+    }
 });
 
 app.post("/petition", (req, res) => {
     let firstName = req.body.first;
     let lastName = req.body.last;
     let sig = req.body.sig;
+    let timeStamp = new Date();
     // let canvasData = req.body;
 
     signatures
-        .addSigners(firstName, lastName, sig)
+        .addSigners(firstName, lastName, sig, timeStamp)
         .then(returnId => {
-            res.redirect("/thanks");
+            req.session.signatureId = returnId.rows[0].id;
             console.log("Id of new signature: ", returnId.rows[0].id); // returned id to access cookies
+            res.redirect("/thanks");
         })
         .catch(err => {
             console.log("Error in post: ", err);
@@ -74,9 +81,19 @@ app.post("/petition", (req, res) => {
             });
         });
 });
-
 app.get("/thanks", (req, res) => {
-    res.render("thanks");
+    let id = req.session.signatureId;
+    console.log("ID: ", id);
+    signatures
+        .userSig(id)
+        .then(result => {
+            let sig = result[0].signature;
+            console.log("signature result: ", sig);
+            res.render("thanks", { sig });
+        })
+        .catch(err => {
+            "Error in displaying signature: ", err;
+        });
 });
 
 app.post("/thanks", (req, res) => {

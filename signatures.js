@@ -1,9 +1,15 @@
 const spicedPg = require("spiced-pg"),
     db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
 
+exports.userSig = function(id) {
+    return db
+        .query(`SELECT signature FROM signatures WHERE id = ${id}`)
+        .then(({ rows }) => rows);
+};
+
 exports.getSigners = function() {
     return db
-        .query("SELECT first, last, signature FROM signatures")
+        .query("SELECT first, last, signature, t_stamp FROM signatures")
         .then(({ rows }) => rows);
 };
 
@@ -12,9 +18,9 @@ exports.getSigners = function() {
 // will allow a malicious user to write "DROP TABLE <example table>" instead of the
 // expected values for city, country or population.
 // dont let those bastards trick you!
-exports.addSigners = function(first, last, signatures) {
+exports.addSigners = function(first, last, signatures, timeStamp) {
     return db.query(
-        `INSERT INTO signatures (first, last, signature) VALUES ($1, $2, $3) RETURNING id`,
-        [first, last, signatures]
+        `INSERT INTO signatures (first, last, signature, t_stamp) VALUES ($1, $2, $3, $4) RETURNING id`,
+        [first, last, signatures, timeStamp]
     );
 };
