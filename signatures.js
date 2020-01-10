@@ -3,7 +3,7 @@ const spicedPg = require("spiced-pg"),
 
 exports.getSigners = function() {
     return db
-        .query("SELECT first, last, signatures FROM signatures")
+        .query("SELECT first, last, signature FROM signatures")
         .then(({ rows }) => rows);
 };
 
@@ -14,7 +14,7 @@ exports.getSigners = function() {
 // dont let those bastards trick you!
 exports.addSigners = function(first, last, signatures) {
     return db.query(
-        `INSERT INTO signatures (first, last, signature) VALUES ($1, $2, $3)`,
+        `INSERT INTO signatures (first, last, signature) VALUES ($1, $2, $3) RETURNING id`,
         [first, last, signatures]
     );
 };

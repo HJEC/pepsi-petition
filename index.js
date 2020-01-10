@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const hb = require("express-handlebars");
 const signatures = require("./signatures");
+// const cp = require('cookie-parser');
+const cookieSession = require("cookie-session");
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -14,8 +16,28 @@ app.use(
     })
 );
 
+app.use(
+    cookieSession({
+        secret: "hootie",
+        maxAge: 1000 * 60 * 60 * 24 * 14
+    })
+);
+app.get("/", (req, res) => {
+    console.log("You went to the slash route");
+    //
+    req.session.peppermint = "Rhino Randy";
+    console.log("req.session for the slash route: ", req.session.peppermint);
+    //
+    res.redirect("/petition");
+});
+
 app.get("/petition", (req, res) => {
     console.log("GET request reaches petition");
+    //
+    /////// COOKIES //////
+    req.session.peppermint = "Monkey Martin";
+    console.log("req.session: ", req.session.peppermint);
+    //
     res.render("petition", {
         layout: "main",
         helpers: {}
@@ -25,13 +47,14 @@ app.get("/petition", (req, res) => {
 app.post("/petition", (req, res) => {
     let firstName = req.body.first;
     let lastName = req.body.last;
-    // let canvasData = req.body;
     let sig = req.body.sig;
+    // let canvasData = req.body;
 
     signatures
         .addSigners(firstName, lastName, sig)
-        .then(function() {
+        .then(returnId => {
             res.redirect("/thanks");
+            console.log("Id of new signature: ", returnId.rows[0].id); // returned id to access cookies
         })
         .catch(err => {
             console.log("Error in post: ", err);
@@ -57,7 +80,7 @@ app.post("/thanks", (req, res) => {
             });
         })
         .catch(err => {
-            console.log("error in post: ", err);
+            console.log("error in Thanks post: ", err);
         });
 });
 
