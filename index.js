@@ -112,4 +112,21 @@ app.post("/thanks", (req, res) => {
         });
 });
 
+// app.get("/signers", (req, res) => {
+//     console.log("GET request reaches signed");
+//
+//     let id = req.session.signatureId;
+//     signatures.userSig(id).then(result => {
+//         signatures
+//             .getSigners()
+//             .then(data => {
+//                 let sig = result[0].signature;
+//                 res.render("signers", { sig, data });
+//             })
+//             .catch(err => {
+//                 "Error in displaying signature: ", err;
+//             });
+//     });
+// });
+
 app.listen(8080, () => console.log("Petition server is listening"));
