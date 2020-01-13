@@ -13,16 +13,12 @@
     <h2 class="pepsi">PEPSI ⚫ Live For Now.</h2>
 
     {{#if err}}
-    <p class="not_signed">You must fill all input fields to continue!</p>
+    <p class="error">You must fill all input fields to continue!</p>
     {{/if}}
 
     <form  method="post">
-        <div class="flexy">
-            <input class="textbox" type="text" name="first" placeholder="enter first name">
-            <input class="textbox" type="text" name="last" placeholder="enter last name">
-        </div>
 
-        <div class="flexy">
+        <div class="flexy_row">
             <p class="consent"> Click here if you want your name to be publicly available: </p>
             <input type="hidden" name="consent"  value="notclicked">
             <input type="checkbox" class="checkbox" name="consent" value="clicked">

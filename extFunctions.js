@@ -20,18 +20,25 @@ exports.getSigners = function() {
 // will allow a malicious user to write "DROP TABLE <example table>" instead of the
 // expected values for city, country or population.
 // dont let those bastards trick you!
-exports.addSigners = function(first, last, signatures, timeStamp, consent) {
+exports.addSigners = function(
+    first,
+    last,
+    signatures,
+    timeStamp,
+    consent,
+    user_id
+) {
     return db.query(
-        `INSERT INTO signatures (first, last, signature, t_stamp, consent) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-        [first, last, signatures, timeStamp, consent]
+        `INSERT INTO signatures (first, last, signature, t_stamp, consent, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+        [first, last, signatures, timeStamp, consent, user_id]
     );
 };
 
-// exports.numOfSigners = function(id) {
-//     return db
-//         .query("SELECT first, signatures FROM signatures WHERE id = $1", [id])
-//         .then(({ rows }) => rows);
-// };
+exports.logInUser = function(email) {
+    return db
+        .query(`SELECT * FROM users WHERE email = '${email}'`)
+        .then(({ rows }) => rows);
+};
 
 exports.registerUser = function(first, last, email, password) {
     return db.query(

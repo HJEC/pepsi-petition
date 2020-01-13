@@ -87,7 +87,7 @@ footer {
 }
 
 /* NO INPUTS DETECTED */
-.not_signed {
+.error {
     font-size: 2rem;
     color: tomato;
     font-weight: bold;
@@ -96,14 +96,14 @@ footer {
 }
 
 /* input fields */
-.register {
+.flexy_column {
     display: flex;
     flex-direction: column;
     margin: 30px auto;
     justify-content: center;
     align-items: center;
 }
-.flexy {
+.flexy_row {
     display: flex;
     flex-direction: row;
     margin: 30px auto;

@@ -3,14 +3,18 @@
 
     <h1 class="title pepsi">🥤 MAKE DAVID DRINK PEPSI 🥤</h1>
     <h2>Sign up today to end the world's greatest injustice!</h2>
-    
+
+    {{#if emailTaken}}
+    <p class="error">This email address has already been used! <br> Please Try Again.</p>
+    {{/if}}
+
     {{#if err}}
-    <p class="not_signed">You must fill input with valid data to continue!</p>
+    <p class="error">You must fill input with valid data to continue!</p>
     {{/if}}
 
 
     <form  method="post">
-        <div class="register">
+        <div class="flexy_column">
             <input class="textbox" type="text" name="first" placeholder="enter first name"><br>
             <input class="textbox" type="text" name="last" placeholder="enter last name"><br>
             <input class="textbox" type="text" name="email" placeholder="enter email address"><br>

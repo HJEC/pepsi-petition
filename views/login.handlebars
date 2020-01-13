@@ -1,0 +1,25 @@
+<div class="login_page container">
+    {{>images}}
+
+    <h2>Enter your email and password to log-in: </h2>
+    <br>
+
+    {{#if emailWrong}}
+    <p class="error"> The email address used did not match password or does not exist. Please try again</p>
+    {{/if}}
+    {{#if passWrong}}
+    <p class="error"> Incorrect password entered. Please try again</p>
+    {{/if}}
+
+    <div class="flexy_column">
+    <form method="post">
+
+        <input class="textbox" type="text" name="email" placeholder="enter email address"><br>
+        <input class="textbox" type="text" name="password" placeholder="enter new password"><br>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+        <button>LOG IN</button>
+    </form>
+</div>
+
+</div>
