@@ -1,9 +1,7 @@
 <div class="thanks container">
-    <h1 class="title pepsi">Thank you for signing the Petition</h1>
+    <h1 class="title pepsi">Thank you <strong>{{first}}</strong> for signing the Petition</h1>
     {{#if sig}}
     <img src="{{sig}}" class="results"><br>
-        {{else}}
-    <img class="david" src="david.png" alt="funny meme thing" class="jpeg">
     {{/if}}
 
     <form method="post">
@@ -13,16 +11,4 @@
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </form>
 
-{{#if data}}
-<div>
-<ul>
-    <br>
-    {{#data}}
-    <li>Name: {{this.first}} {{this.last}}.  - Time: {{this.t_stamp}} - Signature: </li><br>
-    <img src="{{this.signature}}" class="results"><br>
-    {{/data}}
-
-    </ul>
-</div>
-{{/if}}
 </div>

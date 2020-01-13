@@ -6,5 +6,6 @@ CREATE TABLE signatures(
     last VARCHAR NOT NULL CHECK (last != ''),
     signature VARCHAR NOT NULL CHECK (signature != ''),
     t_stamp VARCHAR NOT NULL CHECK (t_Stamp != ''),
-    consent VARCHAR
+    consent VARCHAR,
+    user_id INT NOT NULL REFERENCES users(id) --foreign key (requiring column from a different table)
 );

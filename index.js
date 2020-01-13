@@ -1,13 +1,22 @@
 const express = require("express");
 const app = express();
 const hb = require("express-handlebars");
-const signatures = require("./signatures");
 // const cp = require('cookie-parser');
+//security //
 const cookieSession = require("cookie-session");
 const { SESSION_SECRET: sessionSecret } = require("./secrets.json");
 const csurf = require("csurf");
 const helmet = require("helmet");
-
+const { compare, hashPass } = require("./bcrypt");
+// security //
+//functions//
+const {
+    userSig,
+    getSigners,
+    addSigners,
+    registerUser
+} = require("./extFunctions");
+//functions//
 app.use(helmet());
 
 app.engine("handlebars", hb());
@@ -43,7 +52,31 @@ app.get("/", (req, res) => {
     // console.log("req.session for the slash route: ", req.session.peppermint);
     // console.log("req.session.id for /: ", req.session.signatureId);
     //
-    res.redirect("/petition");
+    res.redirect("/register");
+});
+
+app.get("/register", (req, res) => {
+    res.render("register");
+});
+
+app.post("/register", (req, res) => {
+    let first = req.body.first;
+    let last = req.body.last;
+    let email = req.body.email;
+    let password = req.body.password;
+
+    hashPass(password).then(hashedPass => {
+        console.log("Hashed Password: ", hashedPass);
+        registerUser(first, last, email, hashedPass)
+            .then(({ rows }) => {
+                req.session.id = rows[0].id;
+                res.redirect("/petition");
+            })
+            .catch(err => {
+                console.log("Error in register user page: ", err);
+                res.render("register", { err });
+            });
+    });
 });
 
 app.get("/petition", (req, res) => {
@@ -78,10 +111,8 @@ app.post("/petition", (req, res) => {
     } else {
         consent = req.body.consent;
     }
-    console.log("radio button:", consent);
 
-    signatures
-        .addSigners(firstName, lastName, sig, timeStamp, consent)
+    addSigners(firstName, lastName, sig, timeStamp, consent)
         .then(returnId => {
             req.session.signatureId = returnId.rows[0].id;
             console.log("Id of new signature: ", returnId.rows[0].id); // returned id to access cookies
@@ -98,12 +129,12 @@ app.post("/petition", (req, res) => {
 app.get("/thanks", (req, res) => {
     let id = req.session.signatureId;
     console.log("ID: ", id);
-    signatures
-        .userSig(id)
+    userSig(id)
         .then(result => {
-            let sig = result[0].signature;
-            // console.log("signature result: ", sig);
-            res.render("thanks", { sig });
+            let sig = result[0].signature,
+                first = result[0].first;
+
+            res.render("thanks", { sig, first });
         })
         .catch(err => {
             "Error in displaying signature: ", err;
@@ -111,13 +142,13 @@ app.get("/thanks", (req, res) => {
 });
 
 app.post("/thanks", (req, res) => {
-    // let showSigs = true;
-    signatures
-        .getSigners()
+    res.redirect("signers");
+});
+
+app.get("/signers", (req, res) => {
+    getSigners()
         .then(data => {
-            console.log("List should render");
-            res.render("thanks", {
-                // showSigs,
+            res.render("signers", {
                 data
             });
         })
@@ -125,22 +156,5 @@ app.post("/thanks", (req, res) => {
             console.log("error in Thanks post: ", err);
         });
 });
-
-// app.get("/signers", (req, res) => {
-//     console.log("GET request reaches signed");
-//
-//     let id = req.session.signatureId;
-//     signatures.userSig(id).then(result => {
-//         signatures
-//             .getSigners()
-//             .then(data => {
-//                 let sig = result[0].signature;
-//                 res.render("signers", { sig, data });
-//             })
-//             .catch(err => {
-//                 "Error in displaying signature: ", err;
-//             });
-//     });
-// });
 
 app.listen(8080, () => console.log("Petition server is listening"));

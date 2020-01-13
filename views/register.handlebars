@@ -1,0 +1,23 @@
+<div class="register container">
+    {{>images}}
+
+    <h1 class="title pepsi">🥤 MAKE DAVID DRINK PEPSI 🥤</h1>
+    <h2>Sign up today to end the world's greatest injustice!</h2>
+    
+    {{#if err}}
+    <p class="not_signed">You must fill input with valid data to continue!</p>
+    {{/if}}
+
+
+    <form  method="post">
+        <div class="register">
+            <input class="textbox" type="text" name="first" placeholder="enter first name"><br>
+            <input class="textbox" type="text" name="last" placeholder="enter last name"><br>
+            <input class="textbox" type="text" name="email" placeholder="enter email address"><br>
+            <input class="textbox" type="text" name="password" placeholder="enter new password"><br>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button>SIGN UP</button>
+        </div>
+        <br>
+        <p> If you are already a member, please <a href="/login" class="logIn"> log in here </a>
+</div>

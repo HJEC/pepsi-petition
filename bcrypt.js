@@ -9,16 +9,16 @@ compare = promisify(compare);
 
 module.exports.compare = compare; // compare login password to the hash. If true, then password matched
 
-module.exports.hash = plainTextPass =>
+module.exports.hashPass = plainTextPass =>
     genSalt().then(salt => hash(plainTextPass, salt));
 
-genSalt()
-    .then(salt => {
-        console.log("salt: ", salt);
-        return hash("monkey", salt);
-    })
-    .then(hashedPass => {
-        console.log("hashed pass: ", hashedPass);
-        return compare("monkey", hashedPass);
-    })
-    .then(console.log);
+// genSalt()
+//     .then(salt => {
+//         console.log("salt: ", salt);
+//         return hash("monkey", salt);
+//     })
+//     .then(hashedPass => {
+//         console.log("hashed pass: ", hashedPass);
+//         return compare("monkey", hashedPass);
+//     })
+//     .then(console.log);
