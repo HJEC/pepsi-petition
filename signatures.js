@@ -9,7 +9,9 @@ exports.userSig = function(id) {
 
 exports.getSigners = function() {
     return db
-        .query("SELECT first, last, signature, t_stamp FROM signatures")
+        .query(
+            "SELECT first, last, signature, t_stamp FROM signatures WHERE consent = 'clicked'"
+        )
         .then(({ rows }) => rows);
 };
 
@@ -18,9 +20,9 @@ exports.getSigners = function() {
 // will allow a malicious user to write "DROP TABLE <example table>" instead of the
 // expected values for city, country or population.
 // dont let those bastards trick you!
-exports.addSigners = function(first, last, signatures, timeStamp) {
+exports.addSigners = function(first, last, signatures, timeStamp, consent) {
     return db.query(
-        `INSERT INTO signatures (first, last, signature, t_stamp) VALUES ($1, $2, $3, $4) RETURNING id`,
-        [first, last, signatures, timeStamp]
+        `INSERT INTO signatures (first, last, signature, t_stamp, consent) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+        [first, last, signatures, timeStamp, consent]
     );
 };

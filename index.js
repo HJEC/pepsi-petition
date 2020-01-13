@@ -6,6 +6,9 @@ const signatures = require("./signatures");
 const cookieSession = require("cookie-session");
 const { SESSION_SECRET: sessionSecret } = require("./secrets.json");
 const csurf = require("csurf");
+const helmet = require("helmet");
+
+app.use(helmet());
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -38,7 +41,7 @@ app.get("/", (req, res) => {
     //
     // req.session.peppermint = "Rhino Randy";
     // console.log("req.session for the slash route: ", req.session.peppermint);
-    console.log("req.session.id for /: ", req.session.signatureId);
+    // console.log("req.session.id for /: ", req.session.signatureId);
     //
     res.redirect("/petition");
 });
@@ -64,11 +67,21 @@ app.post("/petition", (req, res) => {
     let firstName = req.body.first;
     let lastName = req.body.last;
     let sig = req.body.sig;
-    let timeStamp = new Date();
-    // let canvasData = req.body;
+    //
+    let date = new Date();
+    let timeStamp = `${date.getFullYear()} - ${date.getMonth() +
+        1} -  ${date.getDate()}`;
+    //
+    let consent;
+    if (req.body.consent[1] === "clicked") {
+        consent = req.body.consent[1];
+    } else {
+        consent = req.body.consent;
+    }
+    console.log("radio button:", consent);
 
     signatures
-        .addSigners(firstName, lastName, sig, timeStamp)
+        .addSigners(firstName, lastName, sig, timeStamp, consent)
         .then(returnId => {
             req.session.signatureId = returnId.rows[0].id;
             console.log("Id of new signature: ", returnId.rows[0].id); // returned id to access cookies
@@ -81,6 +94,7 @@ app.post("/petition", (req, res) => {
             });
         });
 });
+
 app.get("/thanks", (req, res) => {
     let id = req.session.signatureId;
     console.log("ID: ", id);
@@ -88,7 +102,7 @@ app.get("/thanks", (req, res) => {
         .userSig(id)
         .then(result => {
             let sig = result[0].signature;
-            console.log("signature result: ", sig);
+            // console.log("signature result: ", sig);
             res.render("thanks", { sig });
         })
         .catch(err => {

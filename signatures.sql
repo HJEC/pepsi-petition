@@ -5,5 +5,6 @@ CREATE TABLE signatures(
     first VARCHAR NOT NULL CHECK (first != ''),
     last VARCHAR NOT NULL CHECK (last != ''),
     signature VARCHAR NOT NULL CHECK (signature != ''),
-    t_stamp VARCHAR NOT NULL CHECK (t_Stamp != '')
+    t_stamp VARCHAR NOT NULL CHECK (t_Stamp != ''),
+    consent VARCHAR
 );

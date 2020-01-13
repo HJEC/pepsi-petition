@@ -1,24 +1,25 @@
 <div class="thanks container">
-    <h1>Thank you for signing the Petition</h1>
+    <h1 class="title pepsi">Thank you for signing the Petition</h1>
     {{#if sig}}
-    <img src="{{sig}}"><br>
+    <img src="{{sig}}" class="results"><br>
         {{else}}
-    <img src="/dogs.jpg" alt="funny meme thing" class="jpeg">
+    <img class="david" src="david.png" alt="funny meme thing" class="jpeg">
     {{/if}}
 
     <form method="post">
-    <p>click here to see others who signed</p>
+        <br>
+    <p class="decription">click here to see others who signed</p>
     <button type="submit" name="booty">Click Me!</button>
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     </form>
 
 {{#if data}}
-<div class="results">
+<div>
 <ul>
     <br>
     {{#data}}
-    <li>Name: {{this.first}} {{this.last}} time: {{this.t_stamp}} signature:</li>
-    <img src="{{this.signature}}"><br>
+    <li>Name: {{this.first}} {{this.last}}.  - Time: {{this.t_stamp}} - Signature: </li><br>
+    <img src="{{this.signature}}" class="results"><br>
     {{/data}}
 
     </ul>

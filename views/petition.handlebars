@@ -1,22 +1,43 @@
 <div class="petition container">
-    <h1>LETS SIGN A PETITION! 🐶</h1>
-    <h2>Here are some things to care about: Example, example, example</h2>
-    <img src="/dogs.jpg" alt="funny meme thing" class="jpeg">
+    <div class="imageGrid">
+        <img src="coke.png" class="coke_image">
+        <img src="/david.png" alt="david friedman" class="david">
+        <img src="pepsi.png" class="pepsi_image">
+    </div>
+
+    <h1 class="title pepsi">🥤 MAKE DAVID DRINK PEPSI 🥤</h1>
+    <h2>Have you noticed, like myself, how David Friedman drinks a lot of CocaCola &trade;? </h2>
+
+    <p class="description">I'm talking a serious buttload of the stuff. On average David gets through at least 3 to 4 bottles a day <strong>(That I have actually witnessed!)</strong>. In a working year (not counting evenings and weekends) this totals to 1044 bottles.
+    I believe that this creates an unfair market advantage, for what is undeniably a nefarious corporation.
+<br>
+<br>
+    I put forward this petition to convince David to switch to drinking Pepsi &trade; from this day forward and restore balance to the universe. Please sign if you care about this as much as I do.</p>
+    <br>
+    <h2 class="pepsi">PEPSI ⚫ Live For Now.</h2>
 
     {{#if err}}
-    <p class="not_signed">You must fill all input fields to continue</p>
+    <p class="not_signed">You must fill all input fields to continue!</p>
     {{/if}}
 
     <form  method="post">
+        <div class="flexy">
+            <input class="textbox" type="text" name="first" placeholder="enter first name">
+            <input class="textbox" type="text" name="last" placeholder="enter last name">
+        </div>
 
-    <input class="first" type="text" name="first" placeholder="enter first name">
-    <input class="last" type="text" name="last" placeholder="enter last name">
-    <input class="sig" type="hidden" type="text" name="sig">
-    
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <canvas id="canvas" width="300" height="250" name="canvas" border="3px solid black"></canvas>
-    <button class="button">submit now</button>
-</form>
+        <div class="flexy">
+            <p class="consent"> Click here if you want your name to be publicly available: </p>
+            <input type="hidden" name="consent"  value="notclicked">
+            <input type="checkbox" class="checkbox" name="consent" value="clicked">
+        </div>
+
+        <input class="sig" type="hidden" type="text" name="sig">
+        <canvas id="canvas" width="450" height="250" name="canvas" border="3px solid black"></canvas>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button id="bottlecap">submit now</button>
+
+    </form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

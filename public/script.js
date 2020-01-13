@@ -3,7 +3,8 @@
 let hiddenSig = $("input[name='sig']"),
     canvasDraw = document.getElementById("canvas"),
     canvas = $("#canvas"),
-    ctx = canvasDraw.getContext("2d");
+    ctx = canvasDraw.getContext("2d"),
+    bottlecap = $("#bottlecap");
 
 canvas.mouseenter(() => {
     canvas.mousedown(e => {
@@ -30,4 +31,10 @@ canvas.mouseenter(() => {
     canvas.mouseleave(() => {
         canvas.unbind("mousemove");
     });
+});
+
+bottlecap.click(() => {
+    console.log("bottlecap play");
+    let pop = new Audio("soda.mp3");
+    pop.play();
 });
