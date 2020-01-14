@@ -54,6 +54,16 @@ h2 {
     font-size: 2rem;
 }
 
+a {
+    color: #898989;
+    font-size: 1.2rem;
+}
+
+a:hover {
+    color: snow;
+    font-size: 1.3rem;
+}
+
 .description {
     width: 650px;
     margin: 40px auto 20px auto;
@@ -74,7 +84,7 @@ h2.pepsi {
 }
 
 footer {
-    position: static;
+    position: absolute;
     height: 6vh;
     width: 100%;
     padding: 10px;
@@ -84,6 +94,40 @@ footer {
     color: coral;
     font-weight: bold;
     font-size: 1.3rem;
+}
+
+/* SIGNERS PAGE */
+.results {
+    background-color: snow;
+    border-radius: 30px;
+    height: 300px;
+    width: 70%;
+}
+.signers {
+    /* width: 800px; */
+    color: coral;
+    line-height: 20px;
+    margin: 25px;
+    font-size: 1.3rem;
+    margin: auto;
+    justify-content: center;
+}
+
+.age {
+    color: gold;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.signers a {
+    color: coral;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.signers a:hover {
+    color: snow;
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
 /* NO INPUTS DETECTED */
@@ -152,18 +196,4 @@ button {
     src: url("/PEPSI_pl.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
-}
-
-/* signers page */
-
-.results {
-    background-color: snow;
-    border-radius: 30px;
-    height: 300px;
-    width: 70%;
-}
-li {
-    color: coral;
-    line-height: 20px;
-    margin: 25px;
 }

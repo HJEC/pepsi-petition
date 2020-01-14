@@ -1,14 +1,10 @@
 <div class="thanks container">
-    <h1 class="title pepsi">Thank you <strong>{{first}}</strong> for signing the Petition</h1>
-    {{#if sig}}
-    <img src="{{sig}}" class="results"><br>
-    {{/if}}
+    <h1 class="title pepsi">Thank you {{first}} for signing the Petition</h1>
 
-    <form method="post">
+    <img src="{{sig}}" class="results"><br>
+
         <br>
-    <p class="decription">click here to see others who signed</p>
-    <button type="submit" name="booty">Click Me!</button>
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    </form>
+    <a href="/signers" class="decription">click here to see {{count}} who signed</a>
+
 
 </div>

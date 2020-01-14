@@ -13,11 +13,13 @@ const { compare, hashPass } = require("./bcrypt");
 
 //functions//
 const {
+    registerUser,
+    logInUser,
+    addProfile,
+    addSigners,
     userSig,
     getSigners,
-    addSigners,
-    registerUser,
-    logInUser
+    getSignersByCity
 } = require("./extFunctions");
 //functions//
 app.use(helmet());
@@ -54,9 +56,15 @@ app.get("/", (req, res) => {
     // console.log("req.session for the slash route: ", req.session.peppermint);
     // console.log("req.session.id for /: ", req.session.signatureId);
     if (req.session.userId) {
-        res.redirect("/petition");
+        if (req.session.profileId) {
+            res.redirect("/petition");
+        } else {
+            res.redirect("/profile");
+        }
     } else if (req.session.signatureId) {
         res.redirect("/thanks");
+    } else if (req.session.profileId) {
+        res.redirect("/petition");
     } else {
         res.redirect("/register");
     }
@@ -78,8 +86,8 @@ app.post("/register", (req, res) => {
 
         registerUser(first, last, email, hashedPass)
             .then(({ rows }) => {
-                req.session.id = rows[0].id;
-                res.redirect("/petition");
+                req.session.userId = rows[0].id;
+                res.redirect("/profile");
             })
             .catch(err => {
                 let emailTaken = true;
@@ -109,11 +117,11 @@ app.post("/login", (req, res) => {
 
             compare(password, data[0].password).then(result => {
                 console.log(result);
-                if (result === true) {
+                if (result) {
                     req.session.userId = data[0].id;
                     req.session.first = data[0].first;
                     req.session.last = data[0].last;
-                    res.redirect("/petition");
+                    res.redirect("/profile");
                 } else {
                     console.log("compare result: ", result);
                     res.render("login", { passWrong: true });
@@ -126,6 +134,32 @@ app.post("/login", (req, res) => {
         });
 });
 
+// Profile Page Routes //
+
+app.get("/profile", (req, res) => {
+    res.render("profile");
+});
+
+app.post("/profile", (req, res) => {
+    let age = req.body.age;
+    let city = req.body.city;
+    let homepage = req.body.homepage;
+    let user_id = req.session.userId;
+    console.log("profile info: ", age, city, homepage);
+    console.log("user id should be: ", user_id);
+    addProfile(age, city, homepage, user_id)
+        .then(returnId => {
+            req.session.profileId = returnId.rows[0].user_id;
+            console.log("profileId: ", req.session.profileId);
+        })
+        .then(() => {
+            res.redirect("/petition");
+        })
+        .catch(err => {
+            console.log("Error in profile submission: ", err);
+        });
+});
+
 // Petition Routes //
 app.get("/petition", (req, res) => {
     console.log("GET request reaches petition");
@@ -133,10 +167,10 @@ app.get("/petition", (req, res) => {
     // req.session.peppermint = "Monkey Martin";
     // console.log("req.session: ", req.session.peppermint);
     //
-    if (req.session.signatureId) {
-        res.redirect("/thanks");
+    if (req.session.userId) {
+        res.render("petition");
     } else {
-        res.render("register", {
+        res.redirect("/register", {
             // csrfToken: req.csrfToken()
         });
     }
@@ -144,8 +178,6 @@ app.get("/petition", (req, res) => {
 
 app.post("/petition", (req, res) => {
     // add values from user database created at the register page.
-    let firstName = req.session.first;
-    let lastName = req.session.last;
     let sig = req.body.sig;
     let user_id = req.session.userId;
     //
@@ -160,53 +192,73 @@ app.post("/petition", (req, res) => {
         consent = req.body.consent;
     }
 
-    addSigners(firstName, lastName, sig, timeStamp, consent, user_id)
+    addSigners(sig, timeStamp, consent, user_id)
         .then(returnId => {
             req.session.signatureId = returnId.rows[0].id;
-            console.log("Id of new signature: ", returnId.rows[0].id); // returned id to access cookies
+            console.log("Id of new signature: ", req.session.signatureId); // returned id to access cookies
         })
         .then(() => {
             res.redirect("/thanks");
         })
-
         .catch(err => {
-            console.log("Error in post: ", err);
-            res.render("petition", {
-                err
-            });
+            if (err.code === "215") {
+                console.log("non unique id ", err);
+                res.redirect("/thanks");
+            } else {
+                console.log("Error in petition post: ", err);
+                res.render("petition", {
+                    err
+                });
+            }
         });
 });
 
 // Thank You Page Routes //
 app.get("/thanks", (req, res) => {
-    let id = req.session.signatureId;
-    console.log("ID: ", id);
+    console.log("get request reaches thanks");
+    //
+    let id = req.session.userId;
+
     userSig(id)
         .then(result => {
             let sig = result[0].signature,
                 first = result[0].first;
-
-            res.render("thanks", { sig, first });
+            console.log("result first name: ", first);
+            getSigners().then(data => {
+                let count = data.length;
+                res.render("thanks", { sig, first, count });
+            });
         })
         .catch(err => {
             "Error in displaying signature: ", err;
         });
 });
 
-app.post("/thanks", (req, res) => {
-    res.redirect("signers");
-});
+// app.post("/thanks", (req, res) => {
+//     res.redirect("/signers");
+// });
 
 // Signers Page Routes //
 app.get("/signers", (req, res) => {
     getSigners()
         .then(data => {
+            // console.log("signers data: ", data);
             res.render("signers", {
                 data
             });
         })
         .catch(err => {
             console.log("error in Thanks post: ", err);
+        });
+});
+
+app.get("/signers/:city", (req, res) => {
+    getSignersByCity(req.params.city)
+        .then(result => {
+            res.render("signers", { result });
+        })
+        .catch(err => {
+            console.log("error in signers by city: ", err);
         });
 });
 

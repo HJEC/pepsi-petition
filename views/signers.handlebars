@@ -3,13 +3,17 @@
     <br>
 
     <div>
-    <ul>
         <br>
         {{#data}}
-        <li>Name: {{this.first}} {{this.last}}.  - Time: {{this.t_stamp}} - Signature: </li><br>
-        <img src="{{this.signature}}" class="results"><br>
+        <p class="signers">{{this.first}} {{this.last}} &ensp; <span class="age">{{this.age}}</span> &ensp; city:&ensp;<a href="signers/{{this.city}}"> {{this.city}}</a></p><br>
         {{/data}}
 
-        </ul>
+    {{#if result}}
+        <br>
+        {{#result}}
+        <p class="signers">{{this.first}} {{this.last}} &ensp; <span class="age">{{this.age}}</span> &ensp;</p><br>
+        {{/result}}
+    {{/if}}
+
     </div>
 </div>
