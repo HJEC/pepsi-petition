@@ -5,13 +5,14 @@
     <div>
         <br>
         {{#data}}
-        <p class="signers">{{this.first}} {{this.last}} &ensp; <span class="age">{{this.age}}</span> &ensp; city:&ensp;<a href="signers/{{this.city}}"> {{this.city}}</a></p><br>
+        <p class="signers">
+            {{#if url}} <a href="http://{{url}}"> {{/if}} {{first}} {{last}} {{#if url}}</a>{{/if}} &ensp; {{#if age}} <span class="age"> {{age}}</span> {{/if}} &ensp; {{#if city}} city:&ensp;<a href="signers/{{city}}"> {{city}}</a>{{/if}}</p><br>
         {{/data}}
 
     {{#if result}}
         <br>
         {{#result}}
-        <p class="signers">{{this.first}} {{this.last}} &ensp; <span class="age">{{this.age}}</span> &ensp;</p><br>
+        {{#if url}} <a href="http://{{url}}"> {{/if}} {{first}} {{last}} {{#if url}}</a>{{/if}} &ensp; {{#if age}} <span class="age"> {{age}}</span> {{/if}} &ensp;</p><br>
         {{/result}}
     {{/if}}
 
