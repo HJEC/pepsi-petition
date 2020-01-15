@@ -5,7 +5,14 @@ const hb = require("express-handlebars");
 
 //security //
 const cookieSession = require("cookie-session");
-const { SESSION_SECRET: sessionSecret } = require("./secrets.json");
+// const { SESSION_SECRET: sessionSecret } = require("./secrets.json");
+let secrets;
+if (process.env.NODE_ENV === "production") {
+    secrets = process.env;
+} else {
+    secrets = require("./secrets.json");
+}
+
 const csurf = require("csurf");
 const helmet = require("helmet");
 const { compare, hashPass } = require("./bcrypt");
@@ -37,7 +44,7 @@ app.use(
 
 app.use(
     cookieSession({
-        secret: sessionSecret,
+        secret: secrets.SESSION_SECRET,
         maxAge: 1000 * 60 * 60 * 24 * 14
     })
 );
