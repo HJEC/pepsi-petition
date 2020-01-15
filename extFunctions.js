@@ -10,7 +10,9 @@ exports.registerUser = function(first, last, email, password) {
 
 exports.logInUser = function(email) {
     return db
-        .query(`SELECT * FROM users WHERE email = '${email}'`)
+        .query(
+            `SELECT email, password, users.id, signatures.signature, profiles.user_id FROM users LEFT JOIN signatures ON users.id = signatures.user_id LEFT JOIN profiles ON users.id = profiles.user_id WHERE email = '${email}'`
+        )
         .then(({ rows }) => rows);
 };
 

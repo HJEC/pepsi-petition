@@ -5,5 +5,5 @@ CREATE TABLE profiles(
     age INT,
     city VARCHAR,
     url VARCHAR,
-    user_id INT NOT NULL UNIQUE REFERENCES users(id) --foreign key (requiring column from a different table)
+    user_id INT REFERENCES users(id) NOT NULL UNIQUE --foreign key (requiring column from a different table)
 );

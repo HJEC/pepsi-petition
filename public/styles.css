@@ -104,13 +104,14 @@ footer {
     width: 70%;
 }
 .signers {
-    /* width: 800px; */
+    width: 800px;
     color: coral;
     line-height: 20px;
     margin: 25px;
     font-size: 1.3rem;
-    margin: auto;
     justify-content: center;
+    /* text-align: justify; */
+    text-justify: inter-word;
 }
 
 .age {

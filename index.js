@@ -55,20 +55,29 @@ app.get("/", (req, res) => {
     // req.session.peppermint = "Rhino Randy";
     // console.log("req.session for the slash route: ", req.session.peppermint);
     // console.log("req.session.id for /: ", req.session.signatureId);
+    console.log("userid:", req.session.userId);
+    console.log("profile id:", req.session.profileId);
+    console.log("signature id:", req.session.signatureId);
     if (req.session.userId) {
         if (req.session.profileId) {
-            res.redirect("/petition");
+            if (req.session.signatureId) {
+                res.redirect("/thanks");
+            } else {
+                res.redirect("/petition");
+            }
         } else {
             res.redirect("/profile");
         }
-    } else if (req.session.signatureId) {
-        res.redirect("/thanks");
-    } else if (req.session.profileId) {
-        res.redirect("/petition");
     } else {
         res.redirect("/register");
     }
 });
+
+// else if (req.session.signatureId) {
+//     res.redirect("/thanks");
+// } else if (req.session.profileId) {
+//     res.redirect("/petition");
+// }
 
 // Register Page Routes //
 app.get("/register", (req, res) => {
@@ -114,14 +123,20 @@ app.post("/login", (req, res) => {
     logInUser(email)
         .then(data => {
             // console.log("Data: ", data[0].password);
+            // console.log("Data: ", data);
 
             compare(password, data[0].password).then(result => {
                 console.log(result);
                 if (result) {
                     req.session.userId = data[0].id;
-                    req.session.first = data[0].first;
-                    req.session.last = data[0].last;
-                    res.redirect("/profile");
+                    if (data[0].user_id) {
+                        req.session.profileId = data[0].user_id;
+                    }
+                    if (data[0].signature) {
+                        req.session.signatureId = data[0].signature;
+                    }
+
+                    res.redirect("/");
                 } else {
                     console.log("compare result: ", result);
                     res.render("login", { passWrong: true });
@@ -132,6 +147,12 @@ app.post("/login", (req, res) => {
             console.log("Error in email: ", err);
             res.render("login", { emailWrong: true });
         });
+});
+
+// Log-Out Route //
+app.get("/logout", (req, res) => {
+    req.session.user_id = null;
+    res.redirect("/login");
 });
 
 // Profile Page Routes //
@@ -147,13 +168,14 @@ app.post("/profile", (req, res) => {
     let user_id = req.session.userId;
     console.log("profile info: ", age, city, homepage);
     console.log("user id should be: ", user_id);
+
     addProfile(age, city, homepage, user_id)
         .then(returnId => {
             req.session.profileId = returnId.rows[0].user_id;
             console.log("profileId: ", req.session.profileId);
         })
         .then(() => {
-            res.redirect("/petition");
+            res.redirect("/");
         })
         .catch(err => {
             console.log("Error in profile submission: ", err);
