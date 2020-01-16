@@ -1,0 +1,52 @@
+<div class="edit container">
+    {{>images}}
+
+    <h2>Enter new information to edit your profile</h2><br>
+
+    {{#if err}}
+    <h2 class="error">something went wrong. Please try again.</h2>
+    {{/if}}
+
+    <div class="flexy_column">
+    <form method="post">
+        {{#data}}
+
+        <input class="textbox" type="text" name="first"  value="{{first}}"><br>
+        <p>First Name</p>
+        <input class="textbox" type="text" name="last"  value="{{last}}"><br>
+        <p>Last Name</p>
+        <input class="textbox" type="text" name="age" {{#if age}} value="{{age}}" {{else}} placeholder="age" {{/if}}><br>
+        <p>Age</p>
+        <input class="textbox" type="text" name="city" {{#if city}} value="{{city}}" {{else}} placeholder="city" {{/if}}><br>
+        <p>City</p>
+        <input class="textbox" type="text" name="email" {{#if email}} value="{{email}}" {{else}} placeholder="email" {{/if}}><br>
+        <p>Email</p>
+        <input class="textbox" type="text" name="password" placeholder="Password"><br>
+        <input class="textbox" type="hidden" name="hid_pass" value={{password}}><br>
+        <p>Password</p>
+        <input class="textbox" type="text" name="homepage" {{#if url}} value="{{url}}" {{else}} placeholder="homepage" {{/if}}><br>
+        <p>Homepage URL</p>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        {{/data}}
+
+        {{#if signature}}
+        <form method="POST" action="/signature/delete">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <img src="{{signature}}" class="results"><br>
+            <div class="flexy_row">
+                <p class="consent">Click this checkbox and submit if you are sure you want to delete your signature:</p>
+                <input type="checkbox" class="checkbox" name="delete" value="clicked">
+            </div>
+            <button>delete</button>
+            {{!-- <input type="hidden" name="_csrf" value="{{csrfToken}}"> --}}
+        </form>
+        {{/if}}
+
+
+
+
+        <button>SUBMIT</button>
+    </form>
+
+</div>
+{{>logout}}
