@@ -32,6 +32,15 @@ const {
     updateUserPassword,
     upsertProfile
 } = require("./extFunctions");
+
+const {
+    requireLoggedOutUser,
+    noUserId,
+    requireProfileId,
+    noProfileId,
+    requireSignature,
+    requireNoSignature
+} = require("./middleware");
 //functions//
 app.use(helmet());
 
@@ -58,6 +67,9 @@ app.use(csurf()); // CSURF middleware to look for valid secret TOKEN. This adds 
 app.use(function(req, res, next) {
     res.set("x-frame-options", "DENY"); // set headers to stop clickjacking with iframe windows
     res.locals.csrfToken = req.csrfToken();
+    console.log("userid:", req.session.userId);
+    console.log("profile id:", req.session.profileId);
+    console.log("signature id:", req.session.signatureId);
     next();
 });
 
@@ -66,23 +78,23 @@ app.get("/", (req, res) => {
     // req.session.peppermint = "Rhino Randy";
     // console.log("req.session for the slash route: ", req.session.peppermint);
     // console.log("req.session.id for /: ", req.session.signatureId);
-    console.log("userid:", req.session.userId);
-    console.log("profile id:", req.session.profileId);
-    console.log("signature id:", req.session.signatureId);
+    // console.log("userid:", req.session.userId);
+    // console.log("profile id:", req.session.profileId);
+    // console.log("signature id:", req.session.signatureId);
 
-    if (req.session.userId) {
-        if (req.session.profileId) {
-            if (req.session.signatureId) {
-                res.redirect("/thanks");
-            } else {
-                res.redirect("/petition");
-            }
-        } else {
-            res.redirect("/profile");
-        }
-    } else {
-        res.redirect("/register");
-    }
+    // if (req.session.userId) {
+    //     if (req.session.profileId) {
+    //         if (req.session.signatureId) {
+    //             res.redirect("/thanks");
+    //         } else {
+    //             res.redirect("/petition");
+    //         }
+    //     } else {
+    //         res.redirect("/profile");
+    //     }
+    // } else {
+    res.redirect("/register");
+    // }
 });
 
 // else if (req.session.signatureId) {
@@ -92,11 +104,11 @@ app.get("/", (req, res) => {
 // }
 
 // Register Page Routes //
-app.get("/register", (req, res) => {
+app.get("/register", requireLoggedOutUser, (req, res) => {
     res.render("register");
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", requireLoggedOutUser, (req, res) => {
     let password = req.body.password;
 
     hashPass(password).then(hashedPass => {
@@ -108,7 +120,7 @@ app.post("/register", (req, res) => {
         registerUser(first, last, email, hashedPass)
             .then(({ rows }) => {
                 req.session.userId = rows[0].id;
-                res.redirect("/");
+                res.redirect("/profile");
             })
             .catch(err => {
                 let emailTaken = true;
@@ -124,11 +136,11 @@ app.post("/register", (req, res) => {
 });
 
 // Log-In routes //
-app.get("/login", (req, res) => {
+app.get("/login", requireLoggedOutUser, (req, res) => {
     res.render("login");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", requireLoggedOutUser, (req, res) => {
     let email = req.body.email,
         password = req.body.password;
 
@@ -145,7 +157,7 @@ app.post("/login", (req, res) => {
                         req.session.signatureId = data[0].id;
                     }
 
-                    res.redirect("/");
+                    res.redirect("/profile");
                 } else {
                     console.log("compare result: ", result);
                     res.render("login", { passWrong: true });
@@ -161,16 +173,18 @@ app.post("/login", (req, res) => {
 // Log-Out Route //
 app.get("/logout", (req, res) => {
     req.session.user_id = null;
+    req.session.profileId = null;
+    req.session.signatureId = null;
     res.redirect("/login");
 });
 
 // Profile Page Routes //
 
-app.get("/profile", (req, res) => {
+app.get("/profile", noUserId, noProfileId, (req, res) => {
     res.render("profile");
 });
 
-app.post("/profile", (req, res) => {
+app.post("/profile", requireProfileId, noProfileId, (req, res) => {
     let age = req.body.age;
     if (age === "") {
         age = null;
@@ -185,16 +199,17 @@ app.post("/profile", (req, res) => {
             console.log("profileId: ", req.session.profileId);
         })
         .then(() => {
-            res.redirect("/");
+            res.redirect("/petition");
         })
         .catch(err => {
             console.log("Error in profile submission: ", err);
+            res.render("profile", { err });
         });
 });
 
 // Edit Page Routes //
 
-app.get("/edit", (req, res) => {
+app.get("/edit", requireProfileId, (req, res) => {
     let id = req.session.userId;
     getProfileData(id).then(data => {
         // console.log("signature: ", data[0].signature);
@@ -207,27 +222,30 @@ app.get("/edit", (req, res) => {
     });
 });
 
-app.post("/edit", (req, res) => {
+app.post("/edit", noProfileId, (req, res) => {
     let first = req.body.first,
         last = req.body.last,
         age = req.body.age,
         city = req.body.city,
         email = req.body.email,
-        password = req.body.hid_pass,
+        password = req.body.password,
         homepage = req.body.homepage,
         id = req.session.userId,
         checkbox = req.body.delete;
+    console.log("checkbox: ", checkbox);
+
+    if (age === "") {
+        age = null;
+    }
 
     console.log("checkbox value: ", checkbox);
+
     if (checkbox === "clicked") {
         console.log("Checkbox: ", checkbox);
         deleteSig(id).then(() => {
             req.session.signatureId = null;
             res.redirect("/edit");
         });
-    }
-    if (age === "") {
-        age = null;
     }
     console.log("USER ID: ", id);
     Promise.all([
@@ -247,7 +265,7 @@ app.post("/edit", (req, res) => {
             //     homepage,
             //     id
             // );
-            res.redirect("/edit");
+            res.redirect("/edit", { updated: true });
         })
         .catch(err => {
             console.log("Error in edit page: ", err);
@@ -258,20 +276,16 @@ app.post("/edit", (req, res) => {
 });
 
 // Petition Routes //
-app.get("/petition", (req, res) => {
+app.get("/petition", noUserId, requireNoSignature, (req, res) => {
     console.log("GET request reaches petition");
     /////// COOKIES //////
     // req.session.peppermint = "Monkey Martin";
     // console.log("req.session: ", req.session.peppermint);
     //
-    if (req.session.userId) {
-        res.render("petition");
-    } else {
-        res.redirect("/register", {});
-    }
+    res.render("petition");
 });
 
-app.post("/petition", (req, res) => {
+app.post("/petition", noUserId, requireNoSignature, (req, res) => {
     // add values from user database created at the register page.
     let sig = req.body.sig;
     let user_id = req.session.userId;
@@ -309,7 +323,7 @@ app.post("/petition", (req, res) => {
 });
 
 // Thank You Page Routes //
-app.get("/thanks", (req, res) => {
+app.get("/thanks", requireSignature, (req, res) => {
     console.log("get request reaches thanks");
     //
     let id = req.session.userId;
@@ -329,12 +343,12 @@ app.get("/thanks", (req, res) => {
         });
 });
 
-// app.post("/thanks", (req, res) => {
-//     res.redirect("/signers");
-// });
+app.post("/thanks", requireSignature, (req, res) => {
+    res.redirect("/signers");
+});
 
 // Signers Page Routes //
-app.get("/signers", (req, res) => {
+app.get("/signers", requireSignature, (req, res) => {
     getSigners()
         .then(data => {
             // console.log("signers data: ", data);
@@ -347,7 +361,7 @@ app.get("/signers", (req, res) => {
         });
 });
 
-app.get("/signers/:city", (req, res) => {
+app.get("/signers/:city", requireSignature, (req, res) => {
     getSignersByCity(req.params.city)
         .then(result => {
             res.render("signers", { result });
