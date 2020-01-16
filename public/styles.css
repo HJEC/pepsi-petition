@@ -53,6 +53,10 @@ h2 {
     margin: 20px auto;
     font-size: 2rem;
 }
+h2.update {
+    color: snow;
+    font-size: 2.5rem;
+}
 
 a {
     color: #898989;
