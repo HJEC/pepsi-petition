@@ -41,7 +41,7 @@ exports.requireProfileId = function(req, res, next) {
     }
 };
 
-exports.noProfileId = function(req, res, next) {
+exports.hasProfileId = function(req, res, next) {
     if (req.session.profileId) {
         res.redirect("/petition");
     } else {

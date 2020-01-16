@@ -37,7 +37,7 @@ const {
     requireLoggedOutUser,
     noUserId,
     requireProfileId,
-    noProfileId,
+    hasProfileId,
     requireSignature,
     requireNoSignature
 } = require("./middleware");
@@ -72,7 +72,6 @@ app.use(function(req, res, next) {
     console.log("signature id:", req.session.signatureId);
     next();
 });
-
 // SLASH Routes //
 app.get("/", (req, res) => {
     // req.session.peppermint = "Rhino Randy";
@@ -172,19 +171,19 @@ app.post("/login", requireLoggedOutUser, (req, res) => {
 
 // Log-Out Route //
 app.get("/logout", (req, res) => {
-    req.session.user_id = null;
-    req.session.profileId = null;
-    req.session.signatureId = null;
+    delete req.session.userId;
+    delete req.session.profileId;
+    delete req.session.signatureId;
     res.redirect("/login");
 });
 
 // Profile Page Routes //
 
-app.get("/profile", noUserId, noProfileId, (req, res) => {
+app.get("/profile", noUserId, hasProfileId, (req, res) => {
     res.render("profile");
 });
 
-app.post("/profile", requireProfileId, noProfileId, (req, res) => {
+app.post("/profile", noUserId, hasProfileId, (req, res) => {
     let age = req.body.age;
     if (age === "") {
         age = null;
@@ -210,6 +209,7 @@ app.post("/profile", requireProfileId, noProfileId, (req, res) => {
 // Edit Page Routes //
 
 app.get("/edit", requireProfileId, (req, res) => {
+    console.log(req.query);
     let id = req.session.userId;
     getProfileData(id).then(data => {
         // console.log("signature: ", data[0].signature);
@@ -222,7 +222,7 @@ app.get("/edit", requireProfileId, (req, res) => {
     });
 });
 
-app.post("/edit", noProfileId, (req, res) => {
+app.post("/edit", requireProfileId, (req, res) => {
     let first = req.body.first,
         last = req.body.last,
         age = req.body.age,
@@ -238,12 +238,10 @@ app.post("/edit", noProfileId, (req, res) => {
         age = null;
     }
 
-    console.log("checkbox value: ", checkbox);
-
-    if (checkbox === "clicked") {
+    if (checkbox !== undefined) {
         console.log("Checkbox: ", checkbox);
+        delete req.session.signatureId;
         deleteSig(id).then(() => {
-            req.session.signatureId = null;
             res.redirect("/edit");
         });
     }
@@ -254,18 +252,7 @@ app.post("/edit", noProfileId, (req, res) => {
         upsertProfile(age, city, homepage, id)
     ])
         .then(() => {
-            // console.log(
-            //     "info: ",
-            //     first,
-            //     last,
-            //     age,
-            //     city,
-            //     email,
-            //     password,
-            //     homepage,
-            //     id
-            // );
-            res.redirect("/edit", { updated: true });
+            res.redirect("/edit");
         })
         .catch(err => {
             console.log("Error in edit page: ", err);
@@ -273,6 +260,15 @@ app.post("/edit", noProfileId, (req, res) => {
                 res.render("edit", { err, data });
             });
         });
+});
+
+app.post("/signature/delete", (req, res) => {
+    let id = req.session.userId;
+
+    deleteSig(id).then(() => {
+        delete req.session.signatureId;
+        res.redirect("/edit");
+    });
 });
 
 // Petition Routes //
@@ -370,6 +366,11 @@ app.get("/signers/:city", requireSignature, (req, res) => {
             console.log("error in signers by city: ", err);
         });
 });
+
+if (require.main == module) {
+    //app.listen goes in here when someone requires node index.js
+    //main module is a way of identifying if this file is the main file
+}
 
 app.listen(process.env.PORT || 8080, () =>
     console.log("Petition server is listening")

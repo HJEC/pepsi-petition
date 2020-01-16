@@ -3,7 +3,7 @@
 
     <h2>Enter new information to edit your profile</h2><br>
 
-    {{#if updated}}
+    {{#if updatedLocal}}
     <h2 class="update">Your profile has been updated!</h2><br>
     {{/if}}
     {{#if err}}
@@ -42,7 +42,7 @@
                 <input type="checkbox" class="checkbox" name="delete" value="clicked">
             </div>
             <button>delete</button>
-            {{!-- <input type="hidden" name="_csrf" value="{{csrfToken}}"> --}}
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
         </form>
         {{/if}}
 
