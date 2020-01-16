@@ -3,6 +3,10 @@
     <h2>Please add more information about yourself:</h2>
     <h3>(Feel free to move on if you do not want to include this information)</h3>
 
+    {{#if err}}
+    <h2 class="error">Invalid input. Please try again.</h2>
+    {{/if}}
+
     <div class="flexy_column">
     <form method="post">
 
