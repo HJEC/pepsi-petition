@@ -3,6 +3,9 @@
 
     <h2>Enter new information to edit your profile</h2><br>
 
+    {{#if updated}}
+    <h2 class="update">Your profile has been updated!</h2><br>
+    {{/if}}
     {{#if err}}
     <h2 class="error">something went wrong. Please try again.</h2>
     {{/if}}
@@ -22,16 +25,17 @@
         <input class="textbox" type="text" name="email" {{#if email}} value="{{email}}" {{else}} placeholder="email" {{/if}}><br>
         <p>Email</p>
         <input class="textbox" type="text" name="password" placeholder="Password"><br>
-        <input class="textbox" type="hidden" name="hid_pass" value={{password}}><br>
+        {{!-- <input class="textbox" type="hidden" name="hid_pass" value={{password}}><br> --}}
         <p>Password</p>
         <input class="textbox" type="text" name="homepage" {{#if url}} value="{{url}}" {{else}} placeholder="homepage" {{/if}}><br>
         <p>Homepage URL</p>
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
         {{/data}}
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button>SUBMIT</button>
+    </form>
 
         {{#if signature}}
         <form method="POST" action="/signature/delete">
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <img src="{{signature}}" class="results"><br>
             <div class="flexy_row">
                 <p class="consent">Click this checkbox and submit if you are sure you want to delete your signature:</p>
@@ -45,8 +49,6 @@
 
 
 
-        <button>SUBMIT</button>
-    </form>
 
 </div>
 {{>logout}}
