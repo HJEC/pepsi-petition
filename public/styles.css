@@ -87,6 +87,14 @@ h2.pepsi {
     margin: 50px auto;
 }
 
+button {
+    display: block;
+    margin: 30px auto;
+    height: 60px;
+    width: 250px;
+    font-size: 1.5rem;
+}
+
 footer {
     position: absolute;
     height: 6vh;
@@ -100,12 +108,20 @@ footer {
     font-size: 1.3rem;
 }
 
+/* NAV BAR */
+
+.current_page {
+    color: snow;
+    background-color: red;
+    width: 100px;
+}
 /* SIGNERS PAGE */
 .results {
     background-color: snow;
-    border-radius: 30px;
-    height: 300px;
-    width: 70%;
+    border-radius: 15px;
+    border: 5px groove #b5b5b5;
+    height: 200px;
+    width: 50%;
 }
 .signers {
     width: 800px;
@@ -186,14 +202,6 @@ input.checkbox {
     background-size: cover;
     /* display: block; */
     margin-left: 20px auto;
-}
-
-button {
-    display: block;
-    margin: 30px auto;
-    height: 60px;
-    width: 250px;
-    font-size: 1.5rem;
 }
 
 @font-face {

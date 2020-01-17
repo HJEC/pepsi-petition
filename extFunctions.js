@@ -36,6 +36,14 @@ exports.getProfileData = function(id) {
         .then(({ rows }) => rows);
 };
 
+exports.checkHttp = function(url) {
+    if (url.includes("http://" || "https://")) {
+        return url;
+    } else {
+        return (url = "http://" + url);
+    }
+};
+
 // BUILDING THE STRINGS WITH INPUT FROM OUTSIDE USERS IS DANGEROUS!
 // If you plug a value into a query, which will be run in postgres, using interpolation
 // will allow a malicious user to write "DROP TABLE <example table>" instead of the

@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const hb = require("express-handlebars");
+// URL //
+const url = require("url");
+const querystring = require("querystring");
 // const cp = require('cookie-parser');
 
 //security //
@@ -24,6 +27,7 @@ const {
     addProfile,
     getProfileData,
     addSigners,
+    checkHttp,
     userSig,
     deleteSig,
     getSigners,
@@ -67,40 +71,31 @@ app.use(csurf()); // CSURF middleware to look for valid secret TOKEN. This adds 
 app.use(function(req, res, next) {
     res.set("x-frame-options", "DENY"); // set headers to stop clickjacking with iframe windows
     res.locals.csrfToken = req.csrfToken();
-    console.log("userid:", req.session.userId);
-    console.log("profile id:", req.session.profileId);
-    console.log("signature id:", req.session.signatureId);
-    next();
-});
-// SLASH Routes //
-app.get("/", (req, res) => {
-    // req.session.peppermint = "Rhino Randy";
-    // console.log("req.session for the slash route: ", req.session.peppermint);
-    // console.log("req.session.id for /: ", req.session.signatureId);
     // console.log("userid:", req.session.userId);
     // console.log("profile id:", req.session.profileId);
     // console.log("signature id:", req.session.signatureId);
+    res.locals.url = req.url;
 
-    // if (req.session.userId) {
-    //     if (req.session.profileId) {
-    //         if (req.session.signatureId) {
-    //             res.redirect("/thanks");
-    //         } else {
-    //             res.redirect("/petition");
-    //         }
-    //     } else {
-    //         res.redirect("/profile");
-    //     }
-    // } else {
-    res.redirect("/register");
-    // }
+    if (req.url === "/profile") {
+        res.locals.profile = true;
+    }
+    if (req.url === "/edit") {
+        res.locals.edit = true;
+    }
+    if (req.url === "/petition") {
+        res.locals.petition = true;
+    }
+    if (req.url === "/thanks") {
+        res.locals.thanks = true;
+    }
+
+    next();
 });
 
-// else if (req.session.signatureId) {
-//     res.redirect("/thanks");
-// } else if (req.session.profileId) {
-//     res.redirect("/petition");
-// }
+// SLASH Route //
+app.get("/", (req, res) => {
+    res.redirect("/register");
+});
 
 // Register Page Routes //
 app.get("/register", requireLoggedOutUser, (req, res) => {
@@ -180,6 +175,7 @@ app.get("/logout", (req, res) => {
 // Profile Page Routes //
 
 app.get("/profile", noUserId, hasProfileId, (req, res) => {
+    console.log("petition locals: ", res.locals.url === "/profile");
     res.render("profile");
 });
 
@@ -189,7 +185,8 @@ app.post("/profile", noUserId, hasProfileId, (req, res) => {
         age = null;
     }
     let city = req.body.city;
-    let homepage = req.body.homepage;
+    let homepage = checkHttp(req.body.homepage);
+
     let user_id = req.session.userId;
 
     addProfile(age, city, homepage, user_id)
@@ -209,17 +206,32 @@ app.post("/profile", noUserId, hasProfileId, (req, res) => {
 // Edit Page Routes //
 
 app.get("/edit", requireProfileId, (req, res) => {
-    console.log(req.query);
     let id = req.session.userId;
-    getProfileData(id).then(data => {
-        // console.log("signature: ", data[0].signature);
-        if (data[0].signature) {
-            let signature = data[0].signature;
-            res.render("edit", { data, signature });
-        } else {
-            res.render("edit", { data });
-        }
-    });
+
+    let parsedUrl = url.parse(req.url);
+    let updated = querystring.parse(parsedUrl.query);
+
+    console.log("parsedQuery: ", updated.updated);
+
+    if (updated.updated) {
+        getProfileData(id).then(data => {
+            if (data[0].signature) {
+                let signature = data[0].signature;
+                res.render("edit", { updated, data, signature });
+            } else {
+                res.render("edit", { updated, data });
+            }
+        });
+    } else {
+        getProfileData(id).then(data => {
+            if (data[0].signature) {
+                let signature = data[0].signature;
+                res.render("edit", { data, signature });
+            } else {
+                res.render("edit", { data });
+            }
+        });
+    }
 });
 
 app.post("/edit", requireProfileId, (req, res) => {
@@ -229,30 +241,21 @@ app.post("/edit", requireProfileId, (req, res) => {
         city = req.body.city,
         email = req.body.email,
         password = req.body.password,
-        homepage = req.body.homepage,
-        id = req.session.userId,
-        checkbox = req.body.delete;
-    console.log("checkbox: ", checkbox);
+        homepage = checkHttp(req.body.homepage),
+        id = req.session.userId;
+    console.log("USER ID: ", id);
 
     if (age === "") {
         age = null;
     }
 
-    if (checkbox !== undefined) {
-        console.log("Checkbox: ", checkbox);
-        delete req.session.signatureId;
-        deleteSig(id).then(() => {
-            res.redirect("/edit");
-        });
-    }
-    console.log("USER ID: ", id);
     Promise.all([
         updateUser(first, last, email, id),
         updateUserPassword(password, id),
         upsertProfile(age, city, homepage, id)
     ])
         .then(() => {
-            res.redirect("/edit");
+            res.redirect("/edit/?updated=true");
         })
         .catch(err => {
             console.log("Error in edit page: ", err);
@@ -267,7 +270,7 @@ app.post("/signature/delete", (req, res) => {
 
     deleteSig(id).then(() => {
         delete req.session.signatureId;
-        res.redirect("/edit");
+        res.redirect("/edit/?updated=true");
     });
 });
 
@@ -299,7 +302,7 @@ app.post("/petition", noUserId, requireNoSignature, (req, res) => {
 
     addSigners(sig, timeStamp, consent, user_id)
         .then(returnId => {
-            req.session.signatureId = returnId.rows[0].id;
+            req.session.signatureId = req.session.userId;
             console.log("Id of new signature: ", req.session.signatureId); // returned id to access cookies
         })
         .then(() => {

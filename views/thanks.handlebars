@@ -1,10 +1,12 @@
+{{>navbar}}
 <div class="thanks container">
-    <h1 class="title pepsi">Thank you {{first}} for signing the Petition</h1>
+    {{>images}}
+    <h1 class="title pepsi">Thank you {{first}} for signing the Petition!</h1>
 
     <img src="{{sig}}" class="results"><br>
 
         <br>
-    <a href="/signers" class="decription">click here to see {{count}} who signed</a>
+    <a href="/signers" class="decription">click here to see {{count}} other people who signed</a>
 
 
 </div>
