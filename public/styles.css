@@ -136,7 +136,7 @@ footer {
 }
 
 /* NO INPUTS DETECTED */
-.error {
+#error {
     font-size: 2rem;
     color: tomato;
     font-weight: bold;
