@@ -44,6 +44,14 @@ exports.checkHttp = function(url) {
     }
 };
 
+exports.capitalizeFirstLetter = string => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+exports.capitalizeCityNames = string => {
+     return string.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
 // BUILDING THE STRINGS WITH INPUT FROM OUTSIDE USERS IS DANGEROUS!
 // If you plug a value into a query, which will be run in postgres, using interpolation
 // will allow a malicious user to write "DROP TABLE <example table>" instead of the

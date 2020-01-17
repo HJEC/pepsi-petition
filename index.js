@@ -28,6 +28,8 @@ const {
     getProfileData,
     addSigners,
     checkHttp,
+    capitalizeFirstLetter,
+    capitalizeCityNames,
     userSig,
     deleteSig,
     getSigners,
@@ -106,9 +108,9 @@ app.post("/register", requireLoggedOutUser, (req, res) => {
     let password = req.body.password;
 
     hashPass(password).then(hashedPass => {
-        let first = req.body.first;
-        let last = req.body.last;
-        let email = req.body.email;
+        let first = capitalizeFirstLetter(req.body.first.toLowerCase());
+        let last = capitalizeFirstLetter(req.body.last.toLowerCase());
+        let email = req.body.email.toLowerCase();
         // console.log("Hashed Password: ", hashedPass);
 
         registerUser(first, last, email, hashedPass)
@@ -184,7 +186,7 @@ app.post("/profile", noUserId, hasProfileId, (req, res) => {
     if (age === "") {
         age = null;
     }
-    let city = req.body.city;
+    let city = capitalizeCityNames(req.body.city);
     let homepage = checkHttp(req.body.homepage);
 
     let user_id = req.session.userId;
@@ -235,10 +237,10 @@ app.get("/edit", requireProfileId, (req, res) => {
 });
 
 app.post("/edit", requireProfileId, (req, res) => {
-    let first = req.body.first,
-        last = req.body.last,
+    let first = capitalizeFirstLetter(req.body.first.toLowerCase()),
+        last = capitalizeFirstLetter(req.body.last.toLowerCase()),
         age = req.body.age,
-        city = req.body.city,
+        city = capitalizeCityNames(req.body.city),
         email = req.body.email,
         password = req.body.password,
         homepage = checkHttp(req.body.homepage),
