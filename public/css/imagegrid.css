@@ -1,0 +1,36 @@
+/* images  */
+.imageGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 50px 1fr 50px 1fr 1fr;
+}
+.coke_image {
+  width: 85px;
+  grid-column: 2 / span 1;
+  margin: auto;
+}
+.pepsi_image {
+  width: 90px;
+  grid-column: 6 / span 1;
+  margin: auto;
+}
+.behind_dave {
+  position: relative;
+  height: auto;
+  width: 500px;
+  border-radius: 65%;
+  color: tomato;
+  background: linear-gradient(0.4turn, #f95807, #930857);
+  z-index: 1;
+  left: 25px;
+  top: 2px;
+}
+.david {
+  width: 450px;
+  grid-column: 4 / span 1;
+  border: solid 20px #013668;
+  border-radius: 65%;
+  margin: 20px auto;
+  background-color: #013668;
+  z-index: 2;
+}

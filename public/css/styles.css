@@ -16,29 +16,6 @@ body {
   align-items: center;
 }
 
-/* images  */
-.imageGrid {
-  display: grid;
-  grid-template-columns: 100px 1fr 100px 1fr 50px 1fr 100px;
-}
-.coke_image {
-  width: 85px;
-  grid-column: 2 / span 1;
-  margin: auto;
-}
-.pepsi_image {
-  width: 220px;
-  grid-column: 6 / span 1;
-  margin: auto;
-}
-.david {
-  width: 450px;
-  grid-column: 4 / span 1;
-  border: solid 18px peachpuff;
-  border-radius: 65%;
-  margin: 20px auto;
-  background-color: darkslategrey;
-}
 /* head of page  */
 
 .container {

@@ -43,8 +43,8 @@ a:hover {
   padding: 0;
 }
 .nav_button.current_page {
-  background-color: #5a6074;
-  /* border-radius: 7px; */
+  background-color: #707687;
+  border: solid 4px rgba(196, 52, 0.5);
 }
 a.current_page {
   color: snow;
