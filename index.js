@@ -67,8 +67,8 @@ app.use(function(req, res, next) {
   res.set("x-frame-options", "DENY"); // set headers to stop clickjacking with iframe windows
   res.locals.csrfToken = req.csrfToken();
   // console.log("userid:", req.session.userId);
-  // console.log("profile id:", req.session.profileId);
-  // console.log("signature id:", req.session.signatureId);
+  console.log("profile id:", req.session.profileId);
+  console.log("signature id:", req.session.signatureId);
   res.locals.url = req.url;
   res.locals.count = req.session.count;
   console.log("count signatures: ", res.locals.count);
@@ -84,6 +84,12 @@ app.use(function(req, res, next) {
   }
   if (req.url === "/thanks") {
     res.locals.thanks = true;
+  }
+  if (!req.session.profileId) {
+    res.locals.showProfile = true;
+  }
+  if (!req.session.signatureId) {
+    res.locals.showSig = true;
   }
   next();
 });

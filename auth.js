@@ -92,6 +92,10 @@ router.get("/logout", (req, res) => {
   delete req.session.userId;
   delete req.session.profileId;
   delete req.session.signatureId;
+  delete res.locals.register;
+  delete res.locals.login;
+  delete res.locals.showProfile;
+  delete res.locals.showSig;
   res.redirect("/login");
 });
 
