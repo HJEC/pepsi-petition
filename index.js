@@ -2,24 +2,21 @@ const express = require("express"),
   app = express(),
   hb = require("express-handlebars"),
   router = require("./auth");
-// URL //
+//URL//
 const url = require("url");
 const querystring = require("querystring");
-// const cp = require('cookie-parser');
-
 //security //
 const cookieSession = require("cookie-session");
+const csurf = require("csurf");
+const helmet = require("helmet");
+const { compare, hashPass } = require("./bcrypt");
 let secrets;
 if (process.env.NODE_ENV === "production") {
   secrets = process.env;
 } else {
   secrets = require("./secrets.json");
 }
-
-const csurf = require("csurf");
-const helmet = require("helmet");
-const { compare, hashPass } = require("./bcrypt");
-// security //
+//__security__//
 
 //functions//
 const {
@@ -45,14 +42,12 @@ const {
   requireSignature,
   requireNoSignature
 } = require("./middleware");
-//functions//
+//__functions__//
 app.use(helmet());
-
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 
 app.use(express.static("./public"));
-
 app.use(
   express.urlencoded({
     extended: false
@@ -90,17 +85,15 @@ app.use(function(req, res, next) {
   if (req.url === "/thanks") {
     res.locals.thanks = true;
   }
-
   next();
 });
+
 app.use(router);
 
 // Profile Page Routes //
-
-app.get("/profile", noUserId, hasProfileId, (req, res) => {
-  console.log("petition locals: ", res.locals.url === "/profile");
-  res.render("profile");
-});
+app.get("/profile", noUserId, hasProfileId, (req, res) =>
+  res.render("profile")
+);
 
 app.post("/profile", noUserId, hasProfileId, (req, res) => {
   let age = req.body.age;
@@ -127,15 +120,13 @@ app.post("/profile", noUserId, hasProfileId, (req, res) => {
 });
 
 // Edit Page Routes //
-
 app.get("/edit", requireProfileId, (req, res) => {
   let id = req.session.userId;
 
   let parsedUrl = url.parse(req.url);
   let updated = querystring.parse(parsedUrl.query);
 
-  console.log("parsedQuery: ", updated.updated);
-
+  //checking url for "updated" query string to fire hndlbrs-cndtnl with same name
   if (updated.updated) {
     getProfileData(id).then(data => {
       if (data[0].signature) {
@@ -166,7 +157,6 @@ app.post("/edit", requireProfileId, (req, res) => {
     password = req.body.password,
     homepage = checkHttp(req.body.homepage),
     id = req.session.userId;
-  console.log("USER ID: ", id);
 
   if (age === "") {
     age = null;
@@ -189,9 +179,7 @@ app.post("/edit", requireProfileId, (req, res) => {
 });
 
 app.post("/signature/delete", (req, res) => {
-  let id = req.session.userId;
-
-  deleteSig(id).then(() => {
+  deleteSig(req.session.userId).then(() => {
     delete req.session.signatureId;
     res.redirect("/edit/?updated=true");
   });
@@ -200,18 +188,12 @@ app.post("/signature/delete", (req, res) => {
 // Petition Routes //
 app.get("/petition", noUserId, requireNoSignature, (req, res) => {
   console.log("GET request reaches petition");
-  /////// COOKIES //////
-  // req.session.peppermint = "Monkey Martin";
-  // console.log("req.session: ", req.session.peppermint);
-  //
   res.render("petition");
 });
 
 app.post("/petition", noUserId, requireNoSignature, (req, res) => {
-  // add values from user database created at the register page.
   let sig = req.body.sig;
   let user_id = req.session.userId;
-  //
   let date = new Date();
   let timeStamp = `${date.getFullYear()} - ${date.getMonth() +
     1} -  ${date.getDate()}`;
@@ -226,7 +208,7 @@ app.post("/petition", noUserId, requireNoSignature, (req, res) => {
   addSigners(sig, timeStamp, consent, user_id)
     .then(returnId => {
       req.session.signatureId = req.session.userId;
-      console.log("Id of new signature: ", req.session.signatureId); // returned id to access cookies
+      console.log("Id of new signature: ", req.session.signatureId); // using userId cookie to donate signatureId cookie, allowing effective routing
     })
     .then(() => {
       res.redirect("/thanks");
@@ -246,8 +228,6 @@ app.post("/petition", noUserId, requireNoSignature, (req, res) => {
 
 // Thank You Page Routes //
 app.get("/thanks", requireSignature, (req, res) => {
-  console.log("get request reaches thanks");
-  //
   let id = req.session.userId;
 
   userSig(id)
@@ -274,7 +254,6 @@ app.post("/thanks", requireSignature, (req, res) => {
 app.get("/signers", requireSignature, (req, res) => {
   getSigners()
     .then(data => {
-      // console.log("signers data: ", data);
       res.render("signers", {
         data
       });
