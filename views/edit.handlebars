@@ -27,7 +27,6 @@
         <input class="textbox" type="text" name="email" {{#if email}} value="{{email}}" {{else}} placeholder="email" {{/if}}><br>
         <p>Email</p>
         <input class="textbox" type="text" name="password" placeholder="Password"><br>
-        {{!-- <input class="textbox" type="hidden" name="hid_pass" value={{password}}><br> --}}
         <p>Password</p>
         <input class="textbox" type="text" name="homepage" {{#if url}} value="{{url}}" {{else}} placeholder="homepage" {{/if}}><br>
         <p>Homepage URL</p>
@@ -37,7 +36,7 @@
     </form>
 
         {{#if signature}}
-    
+
         <form method="POST" action="/signature/delete">
             <img src="{{signature}}" class="results"><br>
             <p>Your signature</p>
