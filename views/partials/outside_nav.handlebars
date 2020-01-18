@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="/css/navigation.css">
+<div class="navigation" id="signin">
+{{#if register}}
+    <div class="nav_button login">
+        <a href="/login" id="logIn"> log in here </a>
+    </div>
+    {{/if}}
+{{#if login}}
+<div class="nav_button login">
+    <a href="/register" id="login"> Go Back </a>
+</div>
+{{/if}}
+</div>

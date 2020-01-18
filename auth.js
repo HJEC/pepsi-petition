@@ -17,12 +17,14 @@ router.get("/", (req, res) => {
 
 // Register Page Routes //
 router.get("/register", requireLoggedOutUser, (req, res) => {
+  res.locals.register = true;
+  delete res.locals.login;
   res.render("register");
 });
 
 router.post("/register", requireLoggedOutUser, (req, res) => {
   let password = req.body.password;
-
+  delete res.locals.register;
   hashPass(password).then(hashedPass => {
     let first = capitalizeFirstLetter(req.body.first.toLowerCase());
     let last = capitalizeFirstLetter(req.body.last.toLowerCase());
@@ -49,10 +51,13 @@ router.post("/register", requireLoggedOutUser, (req, res) => {
 
 // Log-In routes //
 router.get("/login", requireLoggedOutUser, (req, res) => {
+  delete res.locals.register;
+  res.locals.login = true;
   res.render("login");
 });
 
 router.post("/login", requireLoggedOutUser, (req, res) => {
+  delete res.locals.login;
   let email = req.body.email,
     password = req.body.password;
 
