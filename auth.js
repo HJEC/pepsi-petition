@@ -43,7 +43,7 @@ router.post("/register", requireLoggedOutUser, (req, res) => {
           res.render("register", { emailTaken });
         } else {
           console.log("Error in register user page: ", err);
-          res.render("register", { err });
+          res.render("register", { err, register: true });
         }
       });
   });
@@ -57,9 +57,9 @@ router.get("/login", requireLoggedOutUser, (req, res) => {
 });
 
 router.post("/login", requireLoggedOutUser, (req, res) => {
-  delete res.locals.login;
   let email = req.body.email,
     password = req.body.password;
+  // delete res.locals.login;
 
   logInUser(email)
     .then(data => {
@@ -73,17 +73,16 @@ router.post("/login", requireLoggedOutUser, (req, res) => {
           if (data[0].consent) {
             req.session.signatureId = data[0].id;
           }
-
           res.redirect("/profile");
         } else {
           console.log("compare result: ", result);
-          res.render("login", { passWrong: true });
+          res.render("login", { passWrong: true, login: true });
         }
       });
     })
     .catch(err => {
       console.log("Error in email: ", err);
-      res.render("login", { emailWrong: true });
+      res.render("login", { emailWrong: true, login: true });
     });
 });
 

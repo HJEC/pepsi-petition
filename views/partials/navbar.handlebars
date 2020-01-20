@@ -16,7 +16,7 @@
             <a href="/edit"{{#if edit}} class="current_page"{{/if}}>edit</a>
         </div>
         {{/if}}
-        
+
         {{#if showSig}}
         <div class="nav_button {{#if petition}} current_page{{/if}}">
             <a href="/petition"{{#if petition}} class="current_page"{{/if}}>sign petition</a>
@@ -26,7 +26,7 @@
             <a href="/thanks"{{#if thanks}} class="current_page"{{/if}}>thanks</a>
         </div>
         <div class="nav_button {{#if signers}} current_page{{/if}}">
-        <a href="/signers"{{#if signers}} class="current_page"{{/if}}>see <span class="age">{{count}}</span> other signers</a>
+        <a href="/signers"{{#if signers}} class="current_page"{{/if}}>see <span class="count">{{count}}</span> other signers</a>
         </div>
         {{/if}}
     </div>

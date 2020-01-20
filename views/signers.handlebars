@@ -1,21 +1,21 @@
+<link rel="stylesheet" href="/css/signers.css">
 {{>navbar}}
-{{>images}}
-<div class="signers container">
-    <br>
 
-    <div>
+<div class="sign_row">
+{{>just_dave}}
+<div class="list_of_signers">
         <br>
         {{#data}}
-        <p class="signers">
+        <p class="signers"><span><img src="/bottlecap.gif" class="bottlecap"></span>
             {{#if url}} <a href="{{url}}"> {{/if}} {{first}} {{last}} {{#if url}}</a>{{/if}} &ensp; {{#if age}} <span class="age"> {{age}}</span> {{/if}} &ensp; {{#if city}} city:&ensp;<a href="signers/{{city}}"> {{city}} </a> {{/if}} </p><br>
         {{/data}}
 
     {{#if result}}
         <br>
         {{#result}}
+        <p class="signers"><span><img src="/bottlecap.gif" class="bottlecap"></span>
         {{#if url}} <a href="{{url}}"> {{/if}} {{first}} {{last}} {{#if url}}</a>{{/if}} &ensp; {{#if age}} <span class="age"> {{age}}</span> {{/if}} &ensp;</p><br>
         {{/result}}
     {{/if}}
-
-    </div>
+</div>
 </div>

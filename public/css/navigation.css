@@ -1,12 +1,13 @@
 /* NAV BAR */
 .navigation {
+  position: fixed;
   display: grid;
   grid-template-columns: 200px 150px 1fr 900px;
   background-color: #1e1f26;
   align-items: center;
   height: 75px;
   width: 100%;
-  border-bottom: solid 8px #0e0f11;
+  border-bottom: solid 6px #0e0f11;
   position: relative;
 }
 
@@ -15,7 +16,7 @@
   grid-column: 4;
   display: flex;
   flex-direction: row;
-  right: 0;
+  right: 10px;
 }
 
 .nav_button {
@@ -33,6 +34,8 @@
   text-decoration: none;
 }
 
+/* ON HOVER  */
+
 .nav_button:hover {
   background-color: #555a6b;
 }
@@ -40,8 +43,8 @@
 a:hover {
   color: snow;
   font-size: 1.2rem;
-  padding: 0;
 }
+/* CURRENT PAGE  */
 .nav_button.current_page {
   background-color: #707687;
   border: solid 4px rgba(196, 52, 0.5);
@@ -49,6 +52,10 @@ a:hover {
 a.current_page {
   color: snow;
 }
+
+/*__NAV BAR__*/
+
+/* EDIT PAGE GEAR ICON */
 .gear_icon {
   position: relative;
   top: 3px;
@@ -56,7 +63,6 @@ a.current_page {
   width: 20px;
   height: 20px;
 }
-/*__NAV BAR__*/
 
 /* SIGN IN NAV */
 #signin {
@@ -80,7 +86,7 @@ a.current_page {
 div.logout {
   grid-column: 1;
   position: absolute;
-  left: 50px;
+  left: 30px;
   width: auto;
   /* height: 45px; */
 }

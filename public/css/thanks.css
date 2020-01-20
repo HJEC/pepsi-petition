@@ -1,0 +1,71 @@
+.sign_row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 40px auto 100px auto;
+}
+.dave {
+  grid-column: 1 / span 1;
+}
+.david {
+  position: absolute;
+  margin: 0;
+  top: 160px;
+  left: 150px;
+  width: 450px;
+  border: solid 20px #013668;
+  border-radius: 65%;
+  background-color: #013668;
+  z-index: 2;
+}
+.behind_dave {
+  position: absolute;
+  margin: 0;
+  height: 500px;
+  width: 500px;
+  top: 135px;
+  left: 125px;
+  border-radius: 65%;
+  color: tomato;
+  background: linear-gradient(0.4turn, #f95807, #930857);
+  z-index: 1;
+}
+.thanks_block {
+  grid-column: 2 / span 1;
+  margin-top: 75px;
+  margin-left: 600px;
+}
+.thanks {
+  background-image: url(/pepsicans.gif);
+  background-size: cover;
+  width: 100%;
+  height: 85vh;
+}
+h1 {
+  font-size: 2rem;
+  margin: 30px;
+  line-height: 60px;
+  color: snow;
+}
+
+.user {
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-style: oblique;
+  text-transform: uppercase;
+  font-family: "Franklin Gothic";
+  color: #ff501c;
+}
+.click_here {
+  color: snow;
+}
+
+#count {
+  color: gold;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+footer {
+  margin-top: 0px;
+  z-index: -1;
+}

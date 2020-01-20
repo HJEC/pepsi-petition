@@ -14,14 +14,14 @@ canvas.mouseenter(() => {
     canvas.mousemove(e => {
       let newX = e.pageX - e.target.offsetLeft,
         newY = e.pageY - e.target.offsetTop;
-      ctx.strokeStyle = "#e89521";
+      ctx.strokeStyle = "#ff501c";
       ctx.beginPath();
       ctx.moveTo(x, y);
       ctx.lineTo(newX, newY);
       ctx.stroke();
       ctx.lineWidth = 7;
       ctx.lineJoin = "bevel";
-      ctx.setLineDash([0.5, 0.5]);
+      ctx.setLineDash([1, 0]);
       (x = newX), (y = newY);
     });
   });

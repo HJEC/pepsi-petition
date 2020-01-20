@@ -1,25 +1,26 @@
+<link rel="stylesheet" href="/css/reg-and-pet.css">
 {{>outside_nav}}
 {{>images}}
 <div class="register container">
 
-    <h1 class="title pepsi">🥤 MAKE DAVID DRINK PEPSI 🥤</h1>
-    <h2>Sign up today to end the world's greatest injustice!</h2>
+    <h1 class="title pepsi">🥤! MAKE DAVID DRINK PEPSI !🥤</h1>
+    <h2 class="today">Sign up today to end the world's greatest injustice!</h2>
 
     {{#if emailTaken}}
     <p id="error">This email address has already been used! <br> Please Try Again.</p>
     {{/if}}
 
     {{#if err}}
-    <p class="error">You must fill input with valid data to continue!</p>
+    <p id="error">You must fill input with valid data to continue!</p>
     {{/if}}
 
 
     <form  method="post">
         <div class="flexy_column">
-            <input class="textbox" type="text" name="first" placeholder="enter first name"><br>
-            <input class="textbox" type="text" name="last" placeholder="enter last name"><br>
-            <input class="textbox" type="text" name="email" placeholder="enter email address"><br>
-            <input class="textbox" type="text" name="password" placeholder="enter new password"><br>
+            <input type="text" name="first" placeholder="enter first name">
+            <input type="text" name="last" placeholder="enter last name">
+            <input type="text" name="email" placeholder="enter email address">
+            <input type="password" name="password" placeholder="enter new password">
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button>SIGN UP</button>
         </div>

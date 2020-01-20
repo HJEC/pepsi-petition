@@ -1,0 +1,10 @@
+h2.update {
+  color: snow;
+  font-size: 2.5rem;
+}
+
+.your_sig {
+  text-decoration: underline;
+  font-size: 1.2rem;
+  color: snow;
+}
