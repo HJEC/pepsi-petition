@@ -37,7 +37,7 @@ exports.getProfileData = function(id) {
 };
 
 exports.checkHttp = function(url) {
-    if (url.includes("http://" || "https://" || url === "")) {
+    if (url.includes("http://") || url.includes("https://") || url === "") {
         return url;
     } else {
         return (url = "http://" + url);
