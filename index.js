@@ -66,12 +66,8 @@ app.use(csurf()); // CSURF middleware to look for valid secret TOKEN. This adds 
 app.use(function(req, res, next) {
     res.set("x-frame-options", "DENY"); // set headers to stop clickjacking with iframe windows
     res.locals.csrfToken = req.csrfToken();
-    // console.log("userid:", req.session.userId);
-    // console.log("profile id:", req.session.profileId);
-    // console.log("signature id:", req.session.signatureId);
     res.locals.url = req.url;
     res.locals.count = req.session.count;
-    // console.log("count signatures: ", res.locals.count);
 
     if (req.url === "/profile") {
         res.locals.profile = true;
@@ -135,7 +131,7 @@ app.get("/edit", requireProfileId, (req, res) => {
     let parsedUrl = url.parse(req.url);
     let updated = querystring.parse(parsedUrl.query);
 
-    //checking url for "updated" query string to fire hndlbrs-cndtnl with same name
+    //checking url for "updated" query string to fire handlebars-conditional with same name
     if (updated.updated) {
         getProfileData(id).then(data => {
             if (data[0].signature) {

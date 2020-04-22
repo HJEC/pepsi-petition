@@ -1,43 +1,40 @@
 .title {
-  margin: 20px;
-  font-size: 1.9rem;
-  color: snow;
-  white-space: nowrap;
-  min-width: 800px;
+    margin: 20px;
+    font-size: 1.9rem;
+    color: snow;
+    white-space: nowrap;
+    min-width: 800px;
 }
 
 h2.today {
-  width: 700px;
-  margin: 20px auto;
-  font-size: 1.8rem;
-  color: #d3d3d3;
-  /* text-shadow: -4px 2px rgba(130, 130, 130, 0.3); */
+    width: 700px;
+    margin: 20px auto;
+    font-size: 1.8rem;
+    color: #d3d3d3;
 }
 
 h2.have_you {
-  color: snow;
-  margin: 10px auto;
+    color: snow;
+    margin: 10px auto;
 }
 .description {
-  width: 650px;
-  margin: 40px auto 10px auto;
-  font-size: 1.4rem;
-  text-align: justify;
-  word-wrap: break-word;
-  text-justify: inter-word;
-  line-height: 35px;
-  color: #f95807;
+    width: 650px;
+    margin: 40px auto 10px auto;
+    font-size: 1.4rem;
+    text-align: justify;
+    word-wrap: break-word;
+    text-justify: inter-word;
+    line-height: 35px;
+    color: #f95807;
 }
 h2.pepsi {
-  margin: 30px auto 50px auto;
+    margin: 30px auto 50px auto;
 }
 
 #canvas {
-  border: 4px solid black;
-  border-radius: 20px;
-
-  background-image: url("/sign.jpg");
-  background-size: cover;
-  /* display: block; */
-  margin-left: 20px auto;
+    border: 4px solid black;
+    border-radius: 20px;
+    background-image: url("/sign.jpg");
+    background-size: cover;
+    margin-left: 20px auto;
 }
