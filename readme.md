@@ -1,4 +1,4 @@
-<p align="center"><img  width="150"src="/public/bottlecap.gif"/></p>
+<p align="center"><img  width="200"src="/public/pepsicola.png"/></p>
 
 <h1 align="center">Pepsi-Petition</h1>
 <br>
