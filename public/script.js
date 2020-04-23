@@ -1,5 +1,3 @@
-// CODE GENEROUSLY DONATED BY DAVID AUREL //
-
 let hiddenSig = $("input[name='sig']"),
     canvasDraw = document.getElementById("canvas"),
     canvas = $("#canvas"),
