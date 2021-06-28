@@ -1,15 +1,13 @@
 .title {
-    margin: 20px;
-    font-size: 1.9rem;
+    margin: 20px 0px;
+    font-size: 1.7rem;
     color: snow;
-    white-space: nowrap;
-    min-width: 800px;
 }
 
 h2.today {
-    width: 700px;
+    max-width: 700px;
     margin: 20px auto;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: #d3d3d3;
 }
 

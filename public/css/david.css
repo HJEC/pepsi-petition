@@ -1,0 +1,32 @@
+.dave {
+    position: relative;
+    width: 450px;
+    height: 450px;
+    margin-bottom: 50px;
+  }
+
+  .dave {
+    position: relative;
+    width: 450px;
+    height: 450px;
+    margin-bottom: 50px;
+    margin-right: 50px;
+  }
+  .david {
+    position: absolute;
+    width: 450px;
+    inset: 5%;
+    border: solid 20px #013668;
+    border-radius: 65%;
+    background-color: #013668;
+    z-index: 2;
+  }
+  .behind_dave {
+    position: absolute;
+    height: 500px;
+    width: 500px;
+    border-radius: 65%;
+    color: tomato;
+    background: linear-gradient(0.4turn, #f95807, #930857);
+    z-index: 1;
+  }

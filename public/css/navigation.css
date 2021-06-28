@@ -1,22 +1,17 @@
 /* NAV BAR */
 .navigation {
-    position: fixed;
-    display: grid;
-    grid-template-columns: 200px 150px 1fr 900px;
+    display: flex;
+    justify-content: space-between;
     background-color: #1e1f26;
     align-items: center;
     height: 75px;
     width: 100%;
     border-bottom: solid 6px #0e0f11;
-    position: relative;
+    padding: 0px 10px;
 }
 
 .link_block {
-    position: absolute;
-    grid-column: 4;
     display: flex;
-    flex-direction: row;
-    right: 10px;
 }
 
 .nav_button {
@@ -83,9 +78,15 @@ a.current_page {
     margin: auto;
     padding: 0;
 }
-div.logout {
-    grid-column: 1;
-    position: absolute;
-    left: 30px;
-    width: auto;
-}
+
+@media only screen and (max-width: 600px) {
+    .nav_button {
+        margin:  5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+    .nav_button a {
+        font-size: 10px;
+        vertical-align: middle;
+    }
+  }

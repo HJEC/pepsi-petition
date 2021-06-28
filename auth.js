@@ -33,7 +33,6 @@ router.post("/register", requireLoggedOutUser, (req, res) => {
         let first = capitalizeFirstLetter(req.body.first.toLowerCase());
         let last = capitalizeFirstLetter(req.body.last.toLowerCase());
         let email = req.body.email.toLowerCase();
-        // console.log("Hashed Password: ", hashedPass);
 
         registerUser(first, last, email, hashedPass)
             .then(({ rows }) => {

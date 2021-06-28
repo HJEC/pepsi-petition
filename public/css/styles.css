@@ -14,30 +14,24 @@ body {
     display: flex;
     text-align: center;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
+
 footer {
     height: 7vh;
     width: 100%;
     padding: 10px;
-    bottom: 0;
-    margin-top: 45px;
     color: #dc411e;
     font-weight: bold;
     font-size: 1.2rem;
     text-align: right;
 }
-footer span {
-    position: relative;
-    right: 10px;
-}
 
 h2 {
-    width: 700px;
-    margin: 30px auto 10px auto;
-    font-size: 1.6rem;
     color: snow;
+    font-size: 1.6rem;
+    margin: 30px auto 10px auto;
+    white-space: break-spaces;
 }
 h3 {
     margin: 15px auto;
@@ -67,7 +61,7 @@ button {
 
 .container {
     max-width: 850px;
-    align-self: center;
+    width: 100%;
 }
 
 .pepsi {
@@ -107,11 +101,10 @@ input:focus {
     color: snow;
     font-size: 1.2rem;
     font-weight: bold;
-    margin: auto 20px auto 20px;
+    margin: auto 20px;
 }
 
 input.checkbox {
-    appearance: none;
     margin-left: 0;
     width: 25px;
     height: 25px;

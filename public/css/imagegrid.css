@@ -35,3 +35,23 @@
   background-color: #013668;
   z-index: 2;
 }
+
+@media only screen and (max-width: 600px) {
+  .imageGrid {
+    grid-template-columns: 1fr;
+    height: 400px;
+    width: 400px;
+  }
+  .behind_dave {
+    grid-column: 1 / 2;
+    inset: 0;
+  }
+  .david {
+    inset: 2%;
+    position: absolute;
+    inset: 2%;
+  }
+  .coke_image, .pepsi_image {
+    display: none;
+  }
+}

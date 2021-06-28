@@ -26,7 +26,6 @@ canvas.mouseenter(() => {
     canvas.mouseup(() => {
         var dataURL = canvasDraw.toDataURL();
         hiddenSig.val(dataURL);
-        console.log(hiddenSig.val());
 
         canvas.unbind("mousemove");
     });
@@ -36,7 +35,6 @@ canvas.mouseenter(() => {
 });
 
 bottlecap.click(() => {
-    console.log("bottlecap play");
     let pop = new Audio("soda.mp3");
     pop.play();
 });

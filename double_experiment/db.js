@@ -3,7 +3,6 @@ const spicedPg = require("spiced-pg"),
 
 exports.getCities = function() {
     return db.query("SELECT id, population FROM cities").then(({ rows }) => {
-        console.log("here is the result: ", rows);
     });
 };
 

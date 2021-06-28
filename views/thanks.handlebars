@@ -1,15 +1,16 @@
 <link rel="stylesheet" href="/css/thanks.css">
 {{>navbar}}
 <div class="thanks">
-<div value="sign_row">
-{{>just_dave}}
-<div class="thanks_block">
-    <h1 class="pepsi">Thank you <span class="user">{{first}}</span> for <br>signing the Petition</h1>
+    <div class="sign_row">
+        {{>just_dave}}
+        <div class="thanks_block">
+            <h1 class="pepsi">Thank you <span class="user">{{first}}</span> for <br>signing the Petition</h1>
 
-    <img src="{{sig}}" class="results"><br>
+            <img src="{{sig}}" class="results"><br>
 
-        <br>
-    <a href="/signers" class="click_here">click here to see &ensp;<span id="count">{{count}}</span>&ensp; other people who signed</a>
-</div>
-</div>
+            <br>
+            <a href="/signers" class="click_here">click here to see &ensp;<span id="count">{{count}}</span>&ensp; other
+                people who signed</a>
+        </div>
+    </div>
 </div>
