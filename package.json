@@ -21,7 +21,7 @@
     "helmet": "^3.21.2",
     "jest": "^24.9.0",
     "redis": "^3.1.2",
-    "spiced-pg": "^1.0.0",
+    "spiced-pg": "^1.0.4",
     "supertest": "^4.0.2"
   },
   "repository": {

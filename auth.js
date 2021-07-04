@@ -67,7 +67,6 @@ router.post("/login", requireLoggedOutUser, (req, res) => {
     logInUser(email)
         .then(data => {
             compare(password, data[0].password).then(result => {
-                console.log(result);
                 if (result) {
                     req.session.userId = data[0].id;
                     if (data[0].user_id) {
@@ -78,7 +77,6 @@ router.post("/login", requireLoggedOutUser, (req, res) => {
                     }
                     res.redirect("/profile");
                 } else {
-                    console.log("compare result: ", result);
                     res.render("login", { passWrong: true, login: true });
                 }
             });
